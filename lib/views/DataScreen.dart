@@ -41,7 +41,9 @@ class _DataScreenState extends ConsumerState<DataScreen> {
         .toSet();
     final filteredDataList = dataState.dataList.where(
       (element) {
-        if(selectedSubcategory.isEmpty){
+        if(selectedSubcategory.isEmpty && selectedUpazilaFilterIndex ==0){
+          return true;
+        }else if(selectedSubcategory.isEmpty && selectedUpazilaFilterIndex !=0){
           return element.upazila == selectedUpazilaFilterIndex;
         }
         return element.department == selectedSubcategory && element.upazila == selectedUpazilaFilterIndex;
