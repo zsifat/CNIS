@@ -43,7 +43,10 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       (element) {
         if(selectedSubcategory.isEmpty && selectedUpazilaFilterIndex ==0){
           return true;
-        }else if(selectedSubcategory.isEmpty && selectedUpazilaFilterIndex !=0){
+        }else if(selectedSubcategory.isNotEmpty && selectedUpazilaFilterIndex ==0){
+        return element.department==selectedSubcategory;
+        }
+        else if(selectedSubcategory.isEmpty && selectedUpazilaFilterIndex !=0){
           return element.upazila == selectedUpazilaFilterIndex;
         }
         return element.department == selectedSubcategory && element.upazila == selectedUpazilaFilterIndex;

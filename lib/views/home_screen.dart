@@ -84,6 +84,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             );
                           },
                           options: CarouselOptions(
+                            autoPlay: true,
                             height: 250,
                             enlargeCenterPage: true,
                             aspectRatio: 16 / 9,
@@ -227,16 +228,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
                 CachedNetworkImage(
                     errorWidget: (context, url, error) {
-                      return SvgPicture.asset('assets/images/${category.id}.svg',width: 45, height: 45 );
+                      return SvgPicture.asset('assets/images/${category.id}.svg',width: 60, height: 60 );
                     },
                     placeholder: (context, url) {
                       return CircularProgressIndicator(color: Colors.blue.shade800,);
                     },
-                    imageUrl:category.thumb,width: 45, height: 45 ),
+                    imageUrl:category.thumb,width: 60, height: 60),
 
                 const SizedBox(height: 14),
                 Text(
                   category.title,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
                     fontSize: width * 0.04, // Responsive font size
                     fontWeight: FontWeight.w700,

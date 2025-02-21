@@ -23,10 +23,7 @@ class DataCard extends StatelessWidget {
     var mediaQuery = MediaQuery.of(context);
     double width = mediaQuery.size.width;
     return Container(
-      constraints: const BoxConstraints(
-        minHeight: 140,
-
-      ),
+      height: 200,
       child: Card(
         elevation: 2,
         color: Colors.white,
@@ -62,7 +59,9 @@ class DataCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 6),
                     Text(
-                      details, // Address
+                      details,
+                      maxLines: 3,
+                      overflow: TextOverflow.ellipsis,// Address
                       style: TextStyle(
                         fontSize: width * 0.035, // Responsive font size
                         color: Colors.black,
