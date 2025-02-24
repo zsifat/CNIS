@@ -1,6 +1,7 @@
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/advertisement_viewodel.dart';
 import 'package:chapainawabganjcity/views/notice_details.dart';
+import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/news_card.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -50,14 +51,7 @@ class _AdvertisementScreenState extends ConsumerState<AdvertisementScreen> {
     final aboutState = ref.watch(aboutViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'বিজ্ঞাপন',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: Colors.blue.shade900,
-      ),
+      appBar: buildAppBar('বিজ্ঞাপন'),
       body: isOffline
           ? _buildNoInternet() : SingleChildScrollView(
         child: Column(
@@ -121,10 +115,10 @@ class _AdvertisementScreenState extends ConsumerState<AdvertisementScreen> {
                 }
               },
               error: (error, stackTrace) {
-                return const Center(child: LinearProgressIndicator(color: Colors.blue,));
+                return const Center(child: LinearProgressIndicator(color: Colors.green,));
               },
               loading: () {
-                return const Center(child: LinearProgressIndicator(color: Colors.blue,));
+                return const Center(child: LinearProgressIndicator(color: Colors.green,));
               },
             ),
           ],
@@ -158,12 +152,12 @@ class _AdvertisementScreenState extends ConsumerState<AdvertisementScreen> {
       children: [
         GestureDetector(
           onTap: onTap,
-          child: Icon(icon, size: 30, color: Colors.blue.shade900),
+          child: Icon(icon, size: 30, color: Colors.green.shade900),
         ),
         const SizedBox(height: 5),
         Text(
           label,
-          style: TextStyle(color: Colors.blue.shade900, fontSize: 14),
+          style: TextStyle(color: Colors.green.shade900, fontSize: 14),
         ),
       ],
     );

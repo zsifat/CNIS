@@ -1,6 +1,7 @@
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/category_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
+import 'package:chapainawabganjcity/viewmodels/sub_category_viewmodel.dart';
 import 'package:chapainawabganjcity/views/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
@@ -27,6 +28,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
     await ref.read(categoryNotifierProvider.notifier).fetchCategories();
     await ref.read(sliderViewModelProvider.notifier).fetchSliders();
     await ref.read(aboutViewModelProvider.notifier).fetchAboutData();
+    await ref.read(subCategoryProvider.notifier).fetchSubCategories();
 
     // Navigate to HomeScreen once the data has been fetched
     if(context.mounted) {

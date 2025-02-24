@@ -1,5 +1,6 @@
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/states/aboutState.dart';
+import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -13,11 +14,7 @@ class AboutScreen extends ConsumerWidget {
     final aboutState = ref.watch(aboutViewModelProvider);
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('CNIS'),
-        centerTitle: true,
-        backgroundColor: Colors.blue.shade900,
-      ),
+      appBar: buildAppBar('CNIS'),
       body: Column(
         children: [
           // Company Info Section
@@ -29,22 +26,22 @@ class AboutScreen extends ConsumerWidget {
           Expanded(
             child: ListView(
               children: [
-                _buildSectionHeader("Contact Information"),
+                _buildSectionHeader("যোগাযোগ করুন"),
                 InkWell(
                     onTap: () {
                       _dialPhoneNumber(aboutState.about!.phone);
                     },
-                    child: _buildInfoTile(Icons.phone, "Phone", aboutState.about!.phone)),
+                    child: _buildInfoTile(Icons.phone, "ফোন", aboutState.about!.phone)),
                 InkWell(
                     onTap: () {
                       _launchEmail(aboutState.about!.email);
                     },
-                    child: _buildInfoTile(Icons.email, "Email", aboutState.about!.email)),
-                _buildInfoTile(Icons.location_on, "Address", aboutState.about!.address),
+                    child: _buildInfoTile(Icons.email, "ইমেইল", aboutState.about!.email)),
+                _buildInfoTile(Icons.location_on, "ঠিকানা", aboutState.about!.address),
 
                 const Divider(),
 
-                _buildSectionHeader("Follow Us"),
+                _buildSectionHeader("যুক্ত হোন"),
                 _buildSocialMediaTile(FontAwesomeIcons.facebook, "Facebook", aboutState.about!.facebook),
                 _buildSocialMediaTile(FontAwesomeIcons.squareInstagram, "Instagram", aboutState.about!.instagram),
                 _buildSocialMediaTile(FontAwesomeIcons.linkedin, "LinkedIn", aboutState.about!.instagram),
@@ -66,7 +63,6 @@ class AboutScreen extends ConsumerWidget {
     return Column(
       children: [
         const SizedBox(height: 10),
-
         // Owner Image
         CircleAvatar(
           radius: 50,
@@ -93,7 +89,7 @@ class AboutScreen extends ConsumerWidget {
   // 📌 **Reusable ListTile for Contact & Address**
   Widget _buildInfoTile(IconData icon, String title, String info) {
     return ListTile(
-      leading: Icon(icon, color: Colors.blue.shade900),
+      leading: Icon(icon, color: Colors.green.shade900),
       title: Text(
         title,
         style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
@@ -170,7 +166,7 @@ Widget _buildDevelopedBySection() {
               },
             child: const Text(
               "EBEXSOFT",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.blue),
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
             ),
           ),
         ],

@@ -67,19 +67,30 @@ class NewsCard extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     // Author Info
-                    Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 18,
-                          backgroundImage: news.authImg==null ? AssetImage('assets/images/logo-CNIS.png'): NetworkImage(news.authImg!),
-                          onBackgroundImageError: (_, __) => const Icon(Icons.person, size: 20),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          news.author,
-                          style: TextStyle(fontSize: 14, color: Colors.blue.shade900, fontWeight: FontWeight.w600),
-                        ),
-                      ],
+                    Expanded(
+                      child: Row(
+                        children: [
+                          CircleAvatar(
+                            radius: 18,
+                            backgroundImage: news.authImg == null
+                                ? const AssetImage('assets/images/logo-CNIS.png') as ImageProvider
+                                : NetworkImage(news.authImg!),
+                            onBackgroundImageError: (_, __) => const Icon(Icons.person, size: 20),
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              news.author,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
 
                     // Date Published
@@ -89,6 +100,7 @@ class NewsCard extends StatelessWidget {
                     ),
                   ],
                 ),
+
               ],
             ),
           ),

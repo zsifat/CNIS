@@ -1,6 +1,7 @@
 import 'package:chapainawabganjcity/viewmodels/news_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/news_category_viewmodel.dart';
 import 'package:chapainawabganjcity/views/notice_details.dart';
+import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/news_card.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
@@ -54,17 +55,10 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
 
 
     return Scaffold(
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text(
-          'নোটিশ',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        backgroundColor: Colors.blue.shade900,
-      ),
+      appBar: buildAppBar('নোটিশ'),
       body:isOffline
           ? _buildNoInternet() : RefreshIndicator(
-        color: Colors.blue,
+        color: Colors.green,
         onRefresh: () async{
           if(selectedCategoryIndex==0){
             ref.read(newsProvider.notifier).fetchNews(null);
@@ -78,41 +72,41 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               if(newsCategoryState.isLoading)
-                const LinearProgressIndicator(color: Colors.blue,),
+                const LinearProgressIndicator(color: Colors.green,),
               // Categories List with Smooth Scrolling
               if (categories.isNotEmpty)
                 SizedBox(
-                  height: 50,
+                  height: 40,
                   child: ListView.separated(
                     scrollDirection: Axis.horizontal,
-                    itemCount: categories.length+1,
+                    itemCount: categories.length + 1,
                     separatorBuilder: (_, __) => const SizedBox(width: 10),
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
                           setState(() => selectedCategoryIndex = index);
-                          if(index==0){
+                          if (index == 0) {
                             ref.read(newsProvider.notifier).fetchNews(null);
-                          }else{
-                            ref.read(newsProvider.notifier).fetchNews((categories[index-1].id));
+                          } else {
+                            ref.read(newsProvider.notifier).fetchNews(categories[index - 1].id);
                           }
                         },
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 250),
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
                           decoration: BoxDecoration(
-                            color: selectedCategoryIndex == index ? Colors.blue.shade900 : Colors.white,
+                            color: selectedCategoryIndex == index ? Colors.green.shade700 : Colors.white,
                             borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.blue.shade900, width: 1),
+                            border: Border.all(color: Colors.green.shade700, width: 1),
                             boxShadow: selectedCategoryIndex == index
-                                ? [BoxShadow(color: Colors.blue.withOpacity(0.2), blurRadius: 6)]
+                                ? [BoxShadow(color: Colors.green.withOpacity(0.2), blurRadius: 6)]
                                 : [],
                           ),
                           child: Center(
-                            child: Text( index == 0 ? 'All' :
-                              categories[index-1].title,
+                            child: Text(
+                              index == 0 ? 'All' : categories[index - 1].title,
                               style: TextStyle(
-                                color: selectedCategoryIndex == index ? Colors.white : Colors.blue.shade900,
+                                color: selectedCategoryIndex == index ? Colors.white : Colors.green.shade700,
                                 fontSize: 14,
                                 fontWeight: FontWeight.w500,
                               ),
@@ -123,6 +117,7 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
                     },
                   ),
                 ),
+
               if(categories.isEmpty)
                 const SizedBox.shrink(),
               const SizedBox(height: 12),
@@ -151,9 +146,9 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
                       );
                     },
                     error: (error, stackTrace) {
-                      return const Center(child: CircularProgressIndicator(color: Colors.blue,));
+                      return const Center(child: CircularProgressIndicator(color: Colors.green,));
                     }, loading: () {
-                      return const Center(child: CircularProgressIndicator(color: Colors.blue,));
+                      return const Center(child: CircularProgressIndicator(color: Colors.green,));
                     },)
               ),
             ],

@@ -39,7 +39,7 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: BottomNavigationBar(
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedIndex, // Show the selected index
-        selectedItemColor: Colors.blue.shade800, // Color for selected item
+        selectedItemColor: Colors.green.shade800, // Color for selected item
         onTap: _onItemTapped, // Update selected index on tap
         items: const [
           BottomNavigationBarItem(

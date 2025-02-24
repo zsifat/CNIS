@@ -1,5 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/viewmodels/selected_upazila_provider.dart';
+import 'package:chapainawabganjcity/views/shopping_details.dart';
+import 'package:chapainawabganjcity/views/subcategory_screen.dart';
+import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,6 +14,7 @@ import 'package:chapainawabganjcity/viewmodels/category_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
 import '../viewmodels/about_viewmodel.dart';
+import '../viewmodels/sub_category_viewmodel.dart';
 import 'DataScreen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
@@ -27,6 +32,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await ref.read(categoryNotifierProvider.notifier).fetchCategories();
     await ref.read(sliderViewModelProvider.notifier).fetchSliders();
     await ref.read(aboutViewModelProvider.notifier).fetchAboutData();
+    await ref.read(subCategoryProvider.notifier).fetchSubCategories();
   }
 
   @override
@@ -34,24 +40,17 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     final categories = ref.watch(categoryNotifierProvider).categories;
     final sliderImagesState = ref.watch(sliderViewModelProvider);
     final int selectedUpazilaFilterIndex = ref.watch(selectedUpazilaProvider);
+    final subCategories = ref.watch(subCategoryProvider).subCategories;
     var mediaQuery = MediaQuery.of(context);
     double width = mediaQuery.size.width;
     double height = mediaQuery.size.height;
     double padding = mediaQuery.size.width * 0.03;
 
     return Scaffold(
-      drawer: AppDrawer(),
-      appBar: AppBar(
-        backgroundColor: Colors.blue.shade900,
-        iconTheme: const IconThemeData(color: Colors.white),
-        title: const Text(
-          'Chapainawabganj City',
-          style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
-        ),
-        centerTitle: false,
-      ),
+      drawer: const AppDrawer(),
+      appBar: buildAppBar('Chapainawabganj City',centerTitle: false),
       body: RefreshIndicator(
-        color: Colors.blue,
+        color: Colors.green,
         onRefresh: _refreshContent, // Trigger the refresh action
         child: SingleChildScrollView(
           child: Padding(
@@ -66,38 +65,41 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   child: Column(
                     children: [
                       sliderImagesState.isLoading
-                          ? const LinearProgressIndicator(color: Colors.blue)
+                          ? const LinearProgressIndicator(color: Colors.green)
                           : Expanded(
-                        child: CarouselSlider.builder(
-                          itemCount: sliderImagesState.sliders.length,
-                          itemBuilder: (context, index, realIndex) {
-                            return ClipRRect(
-                              borderRadius: BorderRadius.circular(12),
-                              child: CachedNetworkImage(
-                                imageUrl: sliderImagesState.sliders[index].thumb,
-                                placeholder: (context, url) => const Center( // Center the CircularProgressIndicator
-                                  child: CircularProgressIndicator(color: Colors.blue,), // Simply place it at the center
+                              child: CarouselSlider.builder(
+                                itemCount: sliderImagesState.sliders.length,
+                                itemBuilder: (context, index, realIndex) {
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(12),
+                                    child: CachedNetworkImage(
+                                      imageUrl: sliderImagesState.sliders[index].thumb,
+                                      placeholder: (context, url) => const Center(
+                                        // Center the CircularProgressIndicator
+                                        child: CircularProgressIndicator(
+                                          color: Colors.green,
+                                        ), // Simply place it at the center
+                                      ),
+                                      errorWidget: (context, url, error) => const Icon(Icons.error),
+                                      fit: BoxFit.cover,
+                                    ),
+                                  );
+                                },
+                                options: CarouselOptions(
+                                  autoPlay: true,
+                                  height: 250,
+                                  enlargeCenterPage: true,
+                                  aspectRatio: 16 / 9,
+                                  viewportFraction: 1.0,
+                                  autoPlayInterval: const Duration(seconds: 3),
+                                  onPageChanged: (index, reason) {
+                                    setState(() {
+                                      _currentIndex = index;
+                                    });
+                                  },
                                 ),
-                                errorWidget: (context, url, error) => const Icon(Icons.error),
-                                fit: BoxFit.cover,
                               ),
-                            );
-                          },
-                          options: CarouselOptions(
-                            autoPlay: true,
-                            height: 250,
-                            enlargeCenterPage: true,
-                            aspectRatio: 16 / 9,
-                            viewportFraction: 1.0,
-                            autoPlayInterval: const Duration(seconds: 3),
-                            onPageChanged: (index, reason) {
-                              setState(() {
-                                _currentIndex = index;
-                              });
-                            },
-                          ),
-                        ),
-                      ),
+                            ),
                       const SizedBox(height: 10),
                       _buildIndicator(sliderImagesState.sliders.length),
                     ],
@@ -134,10 +136,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                               elevation: 0,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
-                                side: const BorderSide(color: Colors.blue),
+                                side: const BorderSide(color: Colors.green),
                               ),
                               color: selectedUpazilaFilterIndex == index
-                                  ? Colors.blue.shade800
+                                  ? Colors.green.shade800
                                   : Colors.transparent,
                               child: Center(
                                 child: Text(
@@ -147,7 +149,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                     fontWeight: FontWeight.bold,
                                     color: selectedUpazilaFilterIndex == index
                                         ? Colors.white
-                                        : Colors.black,
+                                        : Colors.green.shade900,
                                   ),
                                 ),
                               ),
@@ -167,7 +169,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 ),
 
                 // Grid View for Categories
-                _gridviewWidget(categories, width),
+                _gridviewWidget(categories, width, subCategories),
               ],
             ),
           ),
@@ -188,7 +190,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           height: 8,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            color: _currentIndex == index ? Colors.blue : Colors.grey.shade400,
+            color: _currentIndex == index ? Colors.green : Colors.grey.shade400,
           ),
         );
       }),
@@ -196,7 +198,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   }
 
   // Grid View Widget for categories
-  Widget _gridviewWidget(List<Category> categories, double width) {
+  Widget _gridviewWidget(List<Category> categories, double width, List<SubCategory> subCategories) {
     return GridView.builder(
       padding: EdgeInsets.zero,
       shrinkWrap: true,
@@ -206,7 +208,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         crossAxisCount: 3,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 1,
+        childAspectRatio: 0.9,
       ),
       itemBuilder: (context, index) {
         final category = categories[index];
@@ -218,23 +220,65 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             borderRadius: BorderRadius.circular(12),
           ),
           child: InkWell(
-            onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => DataScreen(id:category.id.toString(),title: category.title,)));
+            onTap: () async {
+              if (category.id == 2) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 2,
+                                )
+                                .toList())));
+              } else if (category.id == 4) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 4,).toList(),)));
+              } else if (category.id == 134) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 134,).toList(),)));
+                // Navigator.push(
+                //     context,
+                //     MaterialPageRoute(
+                //         builder: (context) => SubcategoryPage(
+                //             categoryName: category.title,
+                //             subcategories: subCategories
+                //                 .where(
+                //                   (element) => int.tryParse(element.categoryId ?? '0') == 134,
+                //                 )
+                //                 .toList())));
+              } else {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => DataScreen(
+                              id: category.id.toString(),
+                              title: category.title,
+                            )));
+              }
             },
             borderRadius: BorderRadius.circular(10),
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-
                 CachedNetworkImage(
                     errorWidget: (context, url, error) {
-                      return SvgPicture.asset('assets/images/${category.id}.svg',width: 60, height: 60 );
+                      return SvgPicture.asset('assets/images/${category.id}.svg',
+                          width: 60, height: 60);
                     },
                     placeholder: (context, url) {
-                      return CircularProgressIndicator(color: Colors.blue.shade800,);
+                      return CircularProgressIndicator(
+                        color: Colors.blue.shade800,
+                      );
                     },
-                    imageUrl:category.thumb,width: 60, height: 60),
-
+                    imageUrl: category.thumb,
+                    width: 65,
+                    height: 65),
                 const SizedBox(height: 14),
                 Text(
                   category.title,
@@ -268,4 +312,3 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     );
   }
 }
-

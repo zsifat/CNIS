@@ -5,6 +5,7 @@ import 'package:chapainawabganjcity/models/data.dart';
 import 'package:chapainawabganjcity/models/news.dart';
 import 'package:chapainawabganjcity/models/news_category.dart';
 import 'package:chapainawabganjcity/models/slider.dart';
+import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -203,6 +204,37 @@ class ApiService {
     if (cachedDoctors != null) {
       List<dynamic> data = json.decode(cachedDoctors);
       return data.map((e) => Data.fromJson(e)).toList();
+    }
+    return [];
+  }
+
+  Future<List<SubCategory>> fetchSubCategories() async {
+    const String url = 'https://cnis.smartbizz.xyz/api/sub_category';
+
+    try {
+      final response = await http.get(Uri.parse(url));
+      if (response.statusCode == 200) {
+        List<dynamic> data = json.decode(response.body);
+        List<SubCategory> subCategories = data.map((json) => SubCategory.fromJson(json)).toList();
+        // Cache the categories data
+        await cacheData('subCategories', response.body);
+        return subCategories;
+      } else {
+        // Try fetching from cache if the network request fails
+        return getCachedSubCategories();
+      }
+    } catch (e) {
+      // If an error occurs, fetch from cache
+      return getCachedSubCategories();
+    }
+  }
+
+  Future<List<SubCategory>> getCachedSubCategories() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? cachedCategories = prefs.getString('subCategories');
+    if (cachedCategories != null) {
+      List<dynamic> data = json.decode(cachedCategories);
+      return data.map((json) => SubCategory.fromJson(json)).toList();
     }
     return [];
   }
