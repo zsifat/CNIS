@@ -1,6 +1,10 @@
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/states/aboutState.dart';
+import 'package:chapainawabganjcity/views/advertisement_screen.dart';
+import 'package:chapainawabganjcity/views/main_screen.dart';
+import 'package:chapainawabganjcity/views/notice_screen.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,111 +13,201 @@ import 'package:url_launcher/url_launcher.dart';
 class AboutScreen extends ConsumerWidget {
   const AboutScreen({super.key});
 
+  final TextStyle textStyle = const TextStyle(fontSize: 14, fontWeight: FontWeight.w600);
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final aboutState = ref.watch(aboutViewModelProvider);
+    final Size size = MediaQuery.of(context).size;
 
     return Scaffold(
       appBar: buildAppBar('CNIS'),
-      body: Column(
-        children: [
-          // Company Info Section
-          _buildCompanySection(aboutState),
-
-          const SizedBox(height: 10),
-
-          // Contact Information (List Style)
-          Expanded(
-            child: ListView(
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ListView(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(16),
+                color: const Color(0xFFE9FAF8)
+              ),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/images/logo-CNIS.png',
+                    width: 80,
+                    height: 80,
+                  ),
+                  const SizedBox(width: 6,),
+                  const Expanded(
+                      child: Text(
+                    'Chapainawabganj Information Service',
+                    textAlign: TextAlign.left,
+                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  ))
+                ],
+              ),
+            ),
+            SizedBox(height: 10,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildSectionHeader("যোগাযোগ করুন"),
-                InkWell(
-                    onTap: () {
-                      _dialPhoneNumber(aboutState.about!.phone);
-                    },
-                    child: _buildInfoTile(Icons.phone, "ফোন", aboutState.about!.phone)),
-                InkWell(
-                    onTap: () {
-                      _launchEmail(aboutState.about!.email);
-                    },
-                    child: _buildInfoTile(Icons.email, "ইমেইল", aboutState.about!.email)),
-                _buildInfoTile(Icons.location_on, "ঠিকানা", aboutState.about!.address),
-
-                const Divider(),
-
-                _buildSectionHeader("যুক্ত হোন"),
-                _buildSocialMediaTile(FontAwesomeIcons.facebook, "Facebook", aboutState.about!.facebook),
-                _buildSocialMediaTile(FontAwesomeIcons.squareInstagram, "Instagram", aboutState.about!.instagram),
-                _buildSocialMediaTile(FontAwesomeIcons.linkedin, "LinkedIn", aboutState.about!.instagram),
-                _buildSocialMediaTile(FontAwesomeIcons.xTwitter, "Twitter", aboutState.about!.twitter),
-                const Divider(),
-
-                // Developed by EBEXSOFT
-                _buildDevelopedBySection(),
+                buildInfoCards('২৪ ঘণ্টা\nসাপোর্ট', Icons.support_agent, size),
+                buildInfoCards('সকল সেবা\nএক অ্যাপে', Icons.android, size),
+                buildInfoCards('আমাদের\nসাথে থাকুন', CupertinoIcons.link, size)
               ],
             ),
-          ),
+            const SizedBox(
+              height: 20,
+            ),
+            buildItems(
+              'হোম',
+              Icons.home,
+              () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => MainScreen(),
+                    ));
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'বিজ্ঞাপন দিন',
+              Icons.newspaper,
+              () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => AdvertisementScreen(),
+                    ));
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'নোটিশ',
+              Icons.campaign,
+              () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => NoticeScreen(),
+                    ));
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'যোগাযোগ করুন',
+              Icons.support_agent,
+              () {
+                _dialPhoneNumber(aboutState.about!.phone);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'ফেসবুক গ্রুপ',
+              FontAwesomeIcons.facebook,
+              () {
+                _launchUrl(aboutState.about!.facebook);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'ইন্সটাগ্রাম',
+              FontAwesomeIcons.instagram,
+              () {
+                _launchUrl(aboutState.about!.instagram);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'লিঙ্কডইন',
+              FontAwesomeIcons.linkedin,
+              () {
+                _launchUrl(aboutState.about!.linkdin);
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'টুইটার',
+              FontAwesomeIcons.twitter,
+              () {
+                _launchUrl(aboutState.about!.twitter);
+              },
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget buildItems(String title, IconData iconData, Function() ontap) {
+    return InkWell(
+      onTap: ontap,
+      child: Container(
+        height: 50,
+        padding: const EdgeInsets.symmetric(horizontal: 4),
+        decoration:
+            BoxDecoration(color: const Color(0xFFE9FAF8), borderRadius: BorderRadius.circular(8)),
+        child: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 4),
+              decoration:
+                  BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(8)),
+              child: Icon(
+                iconData,
+                color: Colors.black87,
+                size: 20,
+              ),
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Expanded(
+                child: Text(
+              title,
+              style: textStyle.copyWith(fontSize: 16),
+            )),
+            const Icon(CupertinoIcons.right_chevron)
+          ],
+        ),
+      ),
+    );
+  }
+
+  Container buildInfoCards(String title, IconData icon, Size size) {
+    return Container(
+      height: 60,
+      width: size.width * 0.3,
+      decoration:
+          BoxDecoration(color: const Color(0xFFE9FAF8), borderRadius: BorderRadius.circular(8)),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Icon(icon),
+          Text(
+            title,
+            style: textStyle,
+            textAlign: TextAlign.center,
+          )
         ],
       ),
-    );
-  }
-
-  // 📌 **Company Info Section with Logo & Owner's Image**
-  Widget _buildCompanySection(AboutState aboutState) {
-    return Column(
-      children: [
-        const SizedBox(height: 10),
-        // Owner Image
-        CircleAvatar(
-          radius: 50,
-          backgroundColor: Colors.transparent,
-          backgroundImage: const AssetImage('assets/images/pp.png'),
-          onBackgroundImageError: (_, __) =>
-          const Icon(Icons.person, size: 50, color: Colors.grey),
-        ),
-      ],
-    );
-  }
-
-  // 📌 **Section Headers for Better UI**
-  Widget _buildSectionHeader(String title) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-      child: Text(
-        title,
-        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold, color: Colors.black87),
-      ),
-    );
-  }
-
-  // 📌 **Reusable ListTile for Contact & Address**
-  Widget _buildInfoTile(IconData icon, String title, String info) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.green.shade900),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black87),
-      ),
-      subtitle: Text(
-        info,
-        style: const TextStyle(fontSize: 14, color: Colors.black54),
-      ),
-      trailing: Icon(Icons.chevron_right),
-    );
-  }
-
-  // 📌 **Social Media Tile with Icons & Clickable Links**
-  Widget _buildSocialMediaTile(IconData icon, String title, String url) {
-    return ListTile(
-      leading: Icon(icon, color: Colors.blue.shade700),
-      title: Text(
-        title,
-        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
-      ),
-      trailing: const Icon(Icons.open_in_new),
-      onTap: () {
-        _launchUrl(url);
-      },
     );
   }
 }
@@ -145,8 +239,7 @@ void _dialPhoneNumber(String phoneNumber) async {
   final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
   if (await canLaunchUrl(launchUri)) {
     await launchUrl(launchUri);
-  } else {
-  }
+  } else {}
 }
 
 Widget _buildDevelopedBySection() {
@@ -163,7 +256,7 @@ Widget _buildDevelopedBySection() {
           GestureDetector(
             onTap: () {
               _launchUrl('http://www.ebexsoft.com/');
-              },
+            },
             child: const Text(
               "EBEXSOFT",
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
@@ -174,4 +267,3 @@ Widget _buildDevelopedBySection() {
     ),
   );
 }
-

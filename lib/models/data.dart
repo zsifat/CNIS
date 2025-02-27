@@ -17,6 +17,7 @@ class Data {
   final String? bloodGroup;
   final String? date;
   final String? email;
+  final String? link;
 
   Data({
     required this.id,
@@ -37,6 +38,7 @@ class Data {
     this.bloodGroup,
     this.date,
     this.email,
+    this.link
   });
 
   // Factory method to create a Data object from JSON
@@ -60,6 +62,7 @@ class Data {
       bloodGroup: json['blood_broup'],
       date: json['date'],
       email: json['email'],
+      link: json['link']
     );
   }
 
@@ -84,6 +87,7 @@ class Data {
       'blood_broup': bloodGroup,
       'date': date,
       'email': email,
+      'link':link
     };
   }
 }

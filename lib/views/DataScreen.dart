@@ -119,7 +119,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                           itemCount: filteredDataList.length,
                           itemBuilder: (context, index) {
                             Data data = filteredDataList[index];
-                            print(data.title);
                             return DataCard(
                               data: data,
                             );

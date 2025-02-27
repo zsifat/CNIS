@@ -37,10 +37,9 @@ class DataCard extends StatelessWidget {
                     width: 80,
                     height: 80,
                     fit: BoxFit.cover,
-                    placeholder: (context, url) =>
-                    const CircularProgressIndicator(),
+                    placeholder: (context, url) => const Icon(Icons.image_outlined),
                     errorWidget: (context, url, error) =>
-                    const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                        const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                   ),
                 ),
               ),
@@ -77,7 +76,10 @@ class DataCard extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 10),
-                    ContactButtons(contactNumber: data.contact,googleMap: data.googleMap ?? '',)
+                    ContactButtons(
+                      contactNumber: data.contact,
+                      link: data.link ?? '',
+                    )
                   ],
                 ),
               ),
@@ -87,7 +89,6 @@ class DataCard extends StatelessWidget {
       ),
     );
   }
-
 
   void _showDetailsDialog(BuildContext context, Data data) {
     showDialog(
@@ -196,9 +197,6 @@ class DataCard extends StatelessWidget {
     );
   }
 
-
-
-
   void _showImagePopup(BuildContext context, String imageUrl) {
     showDialog(
       context: context,
@@ -219,7 +217,7 @@ class DataCard extends StatelessWidget {
                   fit: BoxFit.contain,
                   placeholder: (context, url) => const CircularProgressIndicator(),
                   errorWidget: (context, url, error) =>
-                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                      const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                 ),
               ),
             ),
@@ -230,12 +228,11 @@ class DataCard extends StatelessWidget {
   }
 }
 
-
 class ContactButtons extends StatelessWidget {
   final String contactNumber;
-  final String googleMap;
+  final String link;
 
-  ContactButtons({required this.contactNumber,required this.googleMap});
+  const ContactButtons({required this.contactNumber, required this.link});
 
   void _dialPhoneNumber(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);
@@ -256,6 +253,19 @@ class ContactButtons extends StatelessWidget {
       await launchUrl(launchUri);
     } else {
       debugPrint("Could not open Google Maps.");
+    }
+  }
+
+  void _openLink(String? link) async {
+    if (link == null || link.isEmpty) {
+      debugPrint("No URL provided.");
+      return;
+    }
+    final Uri launchUri = Uri.parse(link);
+    if (await canLaunchUrl(launchUri)) {
+      await launchUrl(launchUri);
+    } else {
+      debugPrint("Could not open link.");
     }
   }
 
@@ -280,22 +290,25 @@ class ContactButtons extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(Icons.call, color: Colors.white,size: 14,),
+                Icon(
+                  Icons.call,
+                  color: Colors.white,
+                  size: 14,
+                ),
                 SizedBox(width: 4),
                 Text(
                   "কল করুন",
-                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold,fontSize: 12),
+                  style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ],
             ),
           ),
         ),
 
-
         // Google Map Button (Light Green)
         Expanded(
           child: ElevatedButton(
-            onPressed: () => _openGoogleMap(googleMap),
+            onPressed: () => _openLink(link),
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.green.shade100,
               shape: RoundedRectangleBorder(
@@ -307,11 +320,15 @@ class ContactButtons extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: const [
-                Icon(Icons.place, color: Colors.green,size: 14,),
+                Icon(
+                  Icons.link,
+                  color: Colors.green,
+                  size: 14,
+                ),
                 SizedBox(width: 6),
                 Text(
-                  "ম্যাপ",
-                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold,fontSize: 12),
+                  "লিংক",
+                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 12),
                 ),
               ],
             ),

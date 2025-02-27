@@ -77,7 +77,7 @@ class SubcategoryPage extends StatelessWidget {
                 subcategory.title!,
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: width * 0.04, // Responsive font size
+                  fontSize: width * 0.035, // Responsive font size
                   fontWeight: FontWeight.w600,
                   color: Colors.black,
                 ),

@@ -5,6 +5,7 @@ import 'package:chapainawabganjcity/views/shopping_details.dart';
 import 'package:chapainawabganjcity/views/subcategory_screen.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/app_drawer.dart';
+import 'package:chapainawabganjcity/views/widgets/new_app_drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
@@ -47,8 +48,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     double padding = mediaQuery.size.width * 0.03;
 
     return Scaffold(
-      drawer: const AppDrawer(),
-      appBar: buildAppBar('Chapainawabganj City',centerTitle: false),
+      drawer: const NewAppDrawer(),
+      appBar: buildAppBar('Chapainawabganj City', centerTitle: false),
       body: RefreshIndicator(
         color: Colors.green,
         onRefresh: _refreshContent, // Trigger the refresh action
@@ -208,7 +209,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
         crossAxisCount: 3,
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: 0.9,
+        childAspectRatio: 1,
       ),
       itemBuilder: (context, index) {
         final category = categories[index];
@@ -218,7 +219,9 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(12),
+            boxShadow: [BoxShadow(color: Colors.grey.shade300, blurRadius: 5)],
           ),
+
           child: InkWell(
             onTap: () async {
               if (category.id == 2) {
@@ -236,22 +239,30 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 4,).toList(),)));
+                        builder: (context) => ShoppingDetailsScreen(
+                              id: category.id,
+                              title: category.title,
+                              subcategories: subCategories
+                                  .where(
+                                    (element) => int.tryParse(element.categoryId ?? '0') == 4,
+                                  )
+                                  .toList(),
+                            )));
               } else if (category.id == 134) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 134,).toList(),)));
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
-                //         builder: (context) => SubcategoryPage(
-                //             categoryName: category.title,
-                //             subcategories: subCategories
-                //                 .where(
-                //                   (element) => int.tryParse(element.categoryId ?? '0') == 134,
-                //                 )
-                //                 .toList())));
+                //         builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 134,).toList(),)));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 134,
+                                )
+                                .toList())));
               } else {
                 Navigator.push(
                     context,
@@ -266,25 +277,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                CachedNetworkImage(
-                    errorWidget: (context, url, error) {
-                      return SvgPicture.asset('assets/images/${category.id}.svg',
-                          width: 60, height: 60);
-                    },
-                    placeholder: (context, url) {
-                      return CircularProgressIndicator(
-                        color: Colors.blue.shade800,
-                      );
-                    },
-                    imageUrl: category.thumb,
-                    width: 65,
-                    height: 65),
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                  width: double.infinity,
+                  child: CachedNetworkImage(
+                      errorWidget: (context, url, error) {
+                        return SvgPicture.asset('assets/images/${category.id}.svg',);
+                      },
+                      placeholder: (context, url) {
+                        return CircularProgressIndicator(
+                          color: Colors.blue.shade800,
+                        );
+                      },
+                      imageUrl: category.thumb,
+                      width: 65,
+                      height: 65),
+                ),
                 const SizedBox(height: 14),
                 Text(
                   category.title,
                   overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: width * 0.04, // Responsive font size
+                    fontSize: width * 0.035, // Responsive font size
                     fontWeight: FontWeight.w700,
                     color: Colors.black,
                   ),

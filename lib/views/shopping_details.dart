@@ -32,6 +32,7 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
   @override
   void initState() {
     super.initState();
+    _selectedIndex=widget.subcategories.first.id!.toInt();
     // TODO: implement initState
     Future.microtask(
       () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id.toString()),
@@ -58,8 +59,8 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
         children: [
           Row(
             children: [
-              _buildOption(widget.subcategories[0].title!, 0),
-              _buildOption(widget.subcategories[1].title!, 1),
+              _buildOption(widget.subcategories.first),
+              _buildOption(widget.subcategories.last),
             ],
           ),
           Expanded(child: _buildNewProductContent(dataState, filteredDataList)),
@@ -68,12 +69,12 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
     );
   }
 
-  Widget _buildOption(String text, int index) {
+  Widget _buildOption(SubCategory subcategory) {
     return Expanded(
       child: InkWell(
         onTap: () {
           setState(() {
-            _selectedIndex = index;
+            _selectedIndex = subcategory.id!.toInt();
           });
         },
         child: Column(
@@ -81,18 +82,18 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 12.0),
               child: Text(
-                text,
+                subcategory.title!,
                 style: TextStyle(
                   fontSize: 16,
-                  fontWeight: _selectedIndex == index ? FontWeight.bold : FontWeight.normal,
-                  color: _selectedIndex == index ? Colors.green.shade800 : Colors.black,
+                  fontWeight: _selectedIndex == subcategory.id!.toInt() ? FontWeight.bold : FontWeight.normal,
+                  color: _selectedIndex == subcategory.id!.toInt() ? Colors.green.shade800 : Colors.black,
                 ),
               ),
             ),
             Container(
               height: 3,
               width: double.infinity,
-              color: _selectedIndex == index ? Colors.green.shade800 : Colors.transparent,
+              color: _selectedIndex == subcategory.id!.toInt() ? Colors.green.shade800 : Colors.transparent,
             ),
           ],
         ),
