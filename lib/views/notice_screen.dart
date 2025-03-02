@@ -22,12 +22,13 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
   @override
   void initState() {
     super.initState();
-    Future.microtask(() {
-      _checkInternet();
-      ref.read(newsCategoryProvider.notifier).fetchNewsCategories();
-      ref.read(newsProvider.notifier).fetchNews(null);
-    },);
-
+    Future.microtask(
+      () {
+        _checkInternet();
+        ref.read(newsCategoryProvider.notifier).fetchNewsCategories();
+        ref.read(newsProvider.notifier).fetchNews(null);
+      },
+    );
   }
 
   // Function to check internet connectivity
@@ -45,116 +46,135 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
     });
   }
 
-
-
   @override
   Widget build(BuildContext context) {
     final newsCategoryState = ref.watch(newsCategoryProvider);
     final categories = newsCategoryState.newsCategories;
     final allNews = ref.watch(newsProvider);
 
-
     return Scaffold(
       appBar: buildAppBar('নোটিশ'),
-      body:isOffline
-          ? _buildNoInternet() : RefreshIndicator(
-        color: Colors.green,
-        onRefresh: () async{
-          if(selectedCategoryIndex==0){
-            ref.read(newsProvider.notifier).fetchNews(null);
-          }else{
-            ref.read(newsProvider.notifier).fetchNews((categories[selectedCategoryIndex-1].id));
-          }
-        },
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              if(newsCategoryState.isLoading)
-                const LinearProgressIndicator(color: Colors.green,),
-              // Categories List with Smooth Scrolling
-              if (categories.isNotEmpty)
-                SizedBox(
-                  height: 40,
-                  child: ListView.separated(
-                    scrollDirection: Axis.horizontal,
-                    itemCount: categories.length + 1,
-                    separatorBuilder: (_, __) => const SizedBox(width: 10),
-                    itemBuilder: (context, index) {
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() => selectedCategoryIndex = index);
-                          if (index == 0) {
-                            ref.read(newsProvider.notifier).fetchNews(null);
-                          } else {
-                            ref.read(newsProvider.notifier).fetchNews(categories[index - 1].id);
-                          }
-                        },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 250),
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
-                          decoration: BoxDecoration(
-                            color: selectedCategoryIndex == index ? Colors.green.shade700 : Colors.white,
-                            borderRadius: BorderRadius.circular(12),
-                            border: Border.all(color: Colors.green.shade700, width: 1),
-                            boxShadow: selectedCategoryIndex == index
-                                ? [BoxShadow(color: Colors.green.withOpacity(0.2), blurRadius: 6)]
-                                : [],
-                          ),
-                          child: Center(
-                            child: Text(
-                              index == 0 ? 'All' : categories[index - 1].title,
-                              style: TextStyle(
-                                color: selectedCategoryIndex == index ? Colors.white : Colors.green.shade700,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
+      body: isOffline
+          ? buildNoInternet()
+          : RefreshIndicator(
+              color: Colors.green,
+              onRefresh: () async {
+                if (selectedCategoryIndex == 0) {
+                  ref.read(newsProvider.notifier).fetchNews(null);
+                } else {
+                  ref
+                      .read(newsProvider.notifier)
+                      .fetchNews((categories[selectedCategoryIndex - 1].id));
+                }
+              },
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    if (newsCategoryState.isLoading)
+                      const LinearProgressIndicator(
+                        color: Colors.green,
+                      ),
+                    // Categories List with Smooth Scrolling
+                    if (categories.isNotEmpty)
+                      SizedBox(
+                        height: 40,
+                        child: ListView.separated(
+                          scrollDirection: Axis.horizontal,
+                          itemCount: categories.length + 1,
+                          separatorBuilder: (_, __) => const SizedBox(width: 10),
+                          itemBuilder: (context, index) {
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() => selectedCategoryIndex = index);
+                                if (index == 0) {
+                                  ref.read(newsProvider.notifier).fetchNews(null);
+                                } else {
+                                  ref
+                                      .read(newsProvider.notifier)
+                                      .fetchNews(categories[index - 1].id);
+                                }
+                              },
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 250),
+                                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: selectedCategoryIndex == index
+                                      ? Colors.green.shade700
+                                      : Colors.white,
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(color: Colors.green.shade700, width: 1),
+                                  boxShadow: selectedCategoryIndex == index
+                                      ? [
+                                          BoxShadow(
+                                              color: Colors.green.withOpacity(0.2), blurRadius: 6)
+                                        ]
+                                      : [],
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    index == 0 ? 'All' : categories[index - 1].title,
+                                    style: TextStyle(
+                                      color: selectedCategoryIndex == index
+                                          ? Colors.white
+                                          : Colors.green.shade700,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                ),
                               ),
-                            ),
-                          ),
+                            );
+                          },
                         ),
-                      );
-                    },
-                  ),
+                      ),
+
+                    if (categories.isEmpty) const SizedBox.shrink(),
+                    const SizedBox(height: 12),
+
+                    // Notices List or Empty State
+                    Expanded(
+                        child: allNews.when(
+                      data: (data) {
+                        if (data.isEmpty) {
+                          return _buildEmptyState();
+                        }
+                        return ListView.separated(
+                          physics: const BouncingScrollPhysics(),
+                          separatorBuilder: (_, __) => const SizedBox(height: 12),
+                          itemCount: data.length, // Example count (Replace with real data)
+                          itemBuilder: (context, index) {
+                            return InkWell(
+                              onTap: () {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => NewsDetailScreen(news: data[index]),
+                                ));
+                              },
+                              child: NewsCard(
+                                news: data[index],
+                              ),
+                            );
+                          },
+                        );
+                      },
+                      error: (error, stackTrace) {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.green,
+                        ));
+                      },
+                      loading: () {
+                        return const Center(
+                            child: CircularProgressIndicator(
+                          color: Colors.green,
+                        ));
+                      },
+                    )),
+                  ],
                 ),
-
-              if(categories.isEmpty)
-                const SizedBox.shrink(),
-              const SizedBox(height: 12),
-
-              // Notices List or Empty State
-              Expanded(
-                child: allNews.when(
-                    data: (data) {
-                      if(data.isEmpty) {
-                        return _buildEmptyState();
-                      }
-                      return ListView.separated(
-                        physics: const BouncingScrollPhysics(),
-                        separatorBuilder: (_, __) => const SizedBox(height: 12),
-                        itemCount: data.length, // Example count (Replace with real data)
-                        itemBuilder: (context, index) {
-                          return InkWell(
-                            onTap: () {
-                              Navigator.of(context).push(MaterialPageRoute(builder: (context) => NewsDetailScreen(news: data[index]),));
-                            },
-                            child: NewsCard(
-                              news: data[index],
-                            ),
-                          );
-                        },
-                      );
-                    },
-                    error: (error, stackTrace) {
-                      return const Center(child: CircularProgressIndicator(color: Colors.green,));
-                    }, loading: () {
-                      return const Center(child: CircularProgressIndicator(color: Colors.green,));
-                    },)
               ),
-            ],
-          ),
-        ),
-      ),
+            ),
     );
   }
 
@@ -168,7 +188,8 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
           const SizedBox(height: 16),
           Text(
             'No Notices Available',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+            style:
+                TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
           ),
           const SizedBox(height: 5),
           Text(
@@ -179,15 +200,17 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
       ),
     );
   }
+
   // Widget to show when there's no internet
-  Widget _buildNoInternet() {
+  Widget buildNoInternet() {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             'No Internet Connection',
-            style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+            style:
+                TextStyle(fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
           ),
           const SizedBox(height: 5),
           Text(
@@ -198,5 +221,4 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
       ),
     );
   }
-
 }

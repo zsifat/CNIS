@@ -131,11 +131,9 @@ class ApiService {
 
     try {
       final response = await http.get(Uri.parse(url));
-
       if (response.statusCode == 200) {
         List<dynamic> data = json.decode(response.body);
         List<Data> doctorList = data.map((e) => Data.fromJson(e)).toList();
-
         // Cache the doctor list
         await cacheData(index, response.body);
         return doctorList;

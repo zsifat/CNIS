@@ -3,6 +3,7 @@ import 'package:chapainawabganjcity/viewmodels/states/aboutState.dart';
 import 'package:chapainawabganjcity/views/advertisement_screen.dart';
 import 'package:chapainawabganjcity/views/main_screen.dart';
 import 'package:chapainawabganjcity/views/notice_screen.dart';
+import 'package:chapainawabganjcity/views/package_screen.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -29,27 +30,38 @@ class AboutScreen extends ConsumerWidget {
             Container(
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(16),
-                color: const Color(0xFFE9FAF8)
-              ),
+                  borderRadius: BorderRadius.circular(16), color: const Color(0xFFE9FAF8)),
               child: Row(
                 children: [
-                  Image.asset(
-                    'assets/images/logo-CNIS.png',
-                    width: 80,
-                    height: 80,
+                  CircleAvatar(
+                    backgroundImage: AssetImage('assets/images/pp.png'),
+                    radius: 32,
                   ),
-                  const SizedBox(width: 6,),
-                  const Expanded(
-                      child: Text(
-                    'Chapainawabganj Information Service',
-                    textAlign: TextAlign.left,
-                    style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                  const SizedBox(
+                    width: 6,
+                  ),
+                  Expanded(
+                      child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'মোঃ তৌফিকুল ইসলাম',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+                      ),
+                      Text(
+                        'ডেভেলপার',
+                        textAlign: TextAlign.left,
+                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+                      ),
+                    ],
                   ))
                 ],
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(
+              height: 10,
+            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
@@ -62,14 +74,47 @@ class AboutScreen extends ConsumerWidget {
               height: 20,
             ),
             buildItems(
+              'প্রোফাইল আপডেট করুন',
+              Icons.edit,
+              () {
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
               'হোম',
               Icons.home,
               () {
-                Navigator.push(
+                Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => MainScreen(),
                     ));
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'প্যাকেজ কিনুন',
+              Icons.shopping_cart,
+              () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => SubscriptionPage(),
+                    ));
+              },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'পেমেন্ট হিস্টোরি',
+              Icons.credit_card_rounded,
+              () {
+               showCustomGreenSnackBar(context);
               },
             ),
             const SizedBox(
@@ -82,7 +127,7 @@ class AboutScreen extends ConsumerWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => AdvertisementScreen(),
+                      builder: (context) => const AdvertisementScreen(),
                     ));
               },
             ),
@@ -96,7 +141,7 @@ class AboutScreen extends ConsumerWidget {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => NoticeScreen(),
+                      builder: (context) => const NoticeScreen(),
                     ));
               },
             ),
@@ -134,7 +179,7 @@ class AboutScreen extends ConsumerWidget {
               height: 10,
             ),
             buildItems(
-              'লিঙ্কডইন',
+              'লিঙ্কডিন',
               FontAwesomeIcons.linkedin,
               () {
                 _launchUrl(aboutState.about!.linkdin);
@@ -149,6 +194,14 @@ class AboutScreen extends ConsumerWidget {
               () {
                 _launchUrl(aboutState.about!.twitter);
               },
+            ),
+            const SizedBox(
+              height: 10,
+            ),
+            buildItems(
+              'লগআউট করুন',
+              FontAwesomeIcons.arrowRightFromBracket,
+              () {},
             ),
           ],
         ),
@@ -210,6 +263,27 @@ class AboutScreen extends ConsumerWidget {
       ),
     );
   }
+}
+void showCustomGreenSnackBar(BuildContext context, {String title ='Will be available soon!'}) {
+  final snackBar = SnackBar(
+    content: Text(
+      title,
+      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold), // White text
+    ),
+    backgroundColor: Colors.green,
+    // Green background color
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(10), // Rounded corners
+    ),
+    behavior: SnackBarBehavior.floating,
+    // Floating SnackBar style
+    margin: EdgeInsets.all(16),
+    // Add margin to avoid sticking to edges
+    padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+    // Extra padding
+    duration: const Duration(seconds: 2), // Duration before the SnackBar disappears
+  );
+  ScaffoldMessenger.of(context).showSnackBar(snackBar);
 }
 
 // Launch URL function

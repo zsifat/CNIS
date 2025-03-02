@@ -68,8 +68,8 @@ class SubcategoryPage extends StatelessWidget {
                     );
                   },
                   imageUrl: subcategory.image!,
-                  width: 60,
-                  height: 60),
+                  width: 80,
+                  height: 80),
               const SizedBox(height: 10),
               Text(
                 overflow: TextOverflow.ellipsis,

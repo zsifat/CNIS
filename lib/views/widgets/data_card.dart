@@ -77,8 +77,8 @@ class DataCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     ContactButtons(
-                      contactNumber: data.contact,
-                      link: data.link ?? '',
+                      contactNumber: data.contact ?? '',
+                      link: data.link ?? data.googleMap ?? '',
                     )
                   ],
                 ),
@@ -123,6 +123,7 @@ class DataCard extends StatelessWidget {
                   const SizedBox(height: 12),
 
                   // Dynamic Data Fields
+                  _infoRow("Contact", data.contact),
                   _infoRow('Education', data.degree),
                   _infoRow('Details', data.details),
                   _infoRow("Address", data.address),
@@ -130,7 +131,6 @@ class DataCard extends StatelessWidget {
                   _infoRow("Email", data.email),
                   _infoRow("Price", data.price),
                   _infoRow("Blood Group", data.bloodGroup),
-                  _infoRow("Contact", data.contact),
 
                   const SizedBox(height: 16),
 
@@ -232,7 +232,7 @@ class ContactButtons extends StatelessWidget {
   final String contactNumber;
   final String link;
 
-  const ContactButtons({required this.contactNumber, required this.link});
+  const ContactButtons({super.key, required this.contactNumber, required this.link});
 
   void _dialPhoneNumber(String phoneNumber) async {
     final Uri launchUri = Uri(scheme: 'tel', path: phoneNumber);

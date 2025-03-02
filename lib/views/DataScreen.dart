@@ -3,6 +3,7 @@ import 'package:chapainawabganjcity/models/upazila.dart';
 import 'package:chapainawabganjcity/viewmodels/data_viewmodel.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/data_card.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -21,13 +22,29 @@ class DataScreen extends ConsumerStatefulWidget {
 }
 
 class _DataScreenState extends ConsumerState<DataScreen> {
+  bool isOffline = true;
+
+  void _checkInternet() async {
+    final connectivityResult = await Connectivity().checkConnectivity();
+    setState(() {
+      isOffline = connectivityResult.contains(ConnectivityResult.none);
+    });
+
+    // Listen for connectivity changes
+    Connectivity().onConnectivityChanged.listen((result) {
+      setState(() {
+        isOffline = result.contains(ConnectivityResult.none);
+      });
+    });
+  }
 
   @override
   void initState() {
     super.initState();
     // TODO: implement initState
+    _checkInternet();
     Future.microtask(
-      () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id),
+          () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id),
     );
   }
 
@@ -38,17 +55,20 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     final subCategories = dataState.dataList
         .map(
           (e) => e.department,
-        )
+    )
         .toSet();
     final filteredDataList = dataState.dataList.where(
           (element) {
         if (widget.subCategoryId != null) {
-          return int.parse(element.department) == widget.subCategoryId &&
+          // Check if department is not null before comparing, or handle null safely
+          return (element.department != null &&
+              int.parse(element.department!) == widget.subCategoryId) &&
               (selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex);
         }
         return selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex;
       },
     ).toList();
+
 
     var mediaQuery = MediaQuery.of(context);
     double width = mediaQuery.size.width;
@@ -56,7 +76,8 @@ class _DataScreenState extends ConsumerState<DataScreen> {
 
     return Scaffold(
       appBar: buildAppBar(widget.title),
-      body: Padding(
+      body: isOffline
+          ? buildNoInternet() : Padding(
         padding: EdgeInsets.all(width * 0.03), // Dynamic padding
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -95,38 +116,58 @@ class _DataScreenState extends ConsumerState<DataScreen> {
             dataState.isLoading
                 ? const Center(child: CircularProgressIndicator(color: Colors.green))
                 : filteredDataList.isEmpty
-                    ? Expanded(
-                        child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SvgPicture.asset(
-                            'assets/images/noitem.svg',
-                            width: 100,
-                            height: 100,
-                          ),
-                          const SizedBox(
-                            height: 10,
-                          ),
-                          const Center(
-                              child: Text(
-                            'তথ্য পাওয়া যায়নি',
-                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
-                          )),
-                        ],
-                      ))
-                    : Expanded(
-                        child: ListView.builder(
-                          itemCount: filteredDataList.length,
-                          itemBuilder: (context, index) {
-                            Data data = filteredDataList[index];
-                            return DataCard(
-                              data: data,
-                            );
-                          },
-                        ),
-                      ),
+                ? Expanded(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    SvgPicture.asset(
+                      'assets/images/noitem.svg',
+                      width: 100,
+                      height: 100,
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    const Center(
+                        child: Text(
+                          'তথ্য পাওয়া যায়নি',
+                          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                        )),
+                  ],
+                ))
+                : Expanded(
+              child: ListView.builder(
+                itemCount: filteredDataList.length,
+                itemBuilder: (context, index) {
+                  Data data = filteredDataList[index];
+                  return DataCard(
+                    data: data,
+                  );
+                },
+              ),
+            ),
           ],
         ),
+      ),
+    );
+  }
+
+  Widget buildNoInternet() {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'No Internet Connection',
+            style: TextStyle(
+                fontSize: 18, fontWeight: FontWeight.w600, color: Colors.grey.shade800),
+          ),
+          const SizedBox(height: 5),
+          Text(
+            'Please check your internet and try again!',
+            style: TextStyle(fontSize: 14, color: Colors.grey.shade600),
+          ),
+        ],
       ),
     );
   }

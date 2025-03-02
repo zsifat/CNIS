@@ -45,7 +45,7 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
     final int selectedUpazilaFilterIndex = ref.watch(selectedUpazilaProvider);
     final filteredDataList = dataState.dataList.where(
       (element) {
-        bool departmentMatch = int.parse(element.department) == _selectedIndex;
+        bool departmentMatch = int.parse(element.department!) == _selectedIndex;
         bool upazilaMatch =
             selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex;
 

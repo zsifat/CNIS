@@ -285,9 +285,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                         return SvgPicture.asset('assets/images/${category.id}.svg',);
                       },
                       placeholder: (context, url) {
-                        return CircularProgressIndicator(
-                          color: Colors.blue.shade800,
-                        );
+                        return const Icon(Icons.image_outlined);
                       },
                       imageUrl: category.thumb,
                       width: 65,

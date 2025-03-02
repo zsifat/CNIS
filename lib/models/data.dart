@@ -1,7 +1,7 @@
 class Data {
   final int id;
   final String title;
-  final String department;
+  final String? department;
   final int upazila;
   final String details;
   final String thumb;
@@ -46,20 +46,20 @@ class Data {
     return Data(
       id: json['id'],
       title: json['title'],
-      department: json['depertment'],
+      department: json['depertment'] ?? '',
       upazila: int.tryParse(json['upazilla'].toString()) ?? 0,
-      details: json['details'],
-      thumb: 'https://cnis.smartbizz.xyz/storage/app/${json['thumb']}',
+      details: json['details'] ?? '',
+      thumb: 'https://cnis.smartbizz.xyz/storage/app/${json['thumb'] ?? ''}',
       catId: json['cat_id'],
-      contact: json['contact'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
+      contact: json['contact'] ?? '',
+      createdAt: json['created_at'] ?? '',
+      updatedAt: json['updated_at'] ?? '',
       degree: json['degree'],
       address: json['address'],
       googleMap: json['googlemap'],
       chamber: json['chamber'],
       price: json['price'],
-      bloodGroup: json['blood_broup'],
+      bloodGroup: json['blood_group'],
       date: json['date'],
       email: json['email'],
       link: json['link']
