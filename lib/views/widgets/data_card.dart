@@ -1,4 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chapainawabganjcity/models/upazila.dart';
+import 'package:chapainawabganjcity/views/details_screen.dart';
+import 'package:chapainawabganjcity/views/widgets/photo_view.dart';
+import 'package:chapainawabganjcity/views/widgets/youtube_player_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -6,88 +10,322 @@ import '../../models/data.dart';
 
 class DataCard extends StatelessWidget {
   final Data data;
+  final String categoryId;
 
-  const DataCard({super.key, required this.data});
+  const DataCard({super.key, required this.data, this.categoryId = ''});
+
+  String extractVideoId(String url) {
+    final uri = Uri.parse(url);
+    if (uri.host.contains('youtube.com')) {
+      final queryParams = uri.queryParameters;
+      return queryParams['v'] ?? '';
+    }
+    return '';
+  }
 
   @override
   Widget build(BuildContext context) {
     var mediaQuery = MediaQuery.of(context);
+    Size size = mediaQuery.size;
     double width = mediaQuery.size.width;
 
-    return InkWell(
-      onTap: () {
-        _showDetailsDialog(context, data);
-      },
-      child: Card(
-        color: Colors.white,
-        elevation: 2,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Padding(
-          padding: EdgeInsets.all(width * 0.04),
-          child: Row(
-            children: [
-              GestureDetector(
-                onTap: () => _showImagePopup(context, data.thumb),
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(8),
+    //video barta
+    if(categoryId=='144'){
+      return InkWell(
+        onTap: () {
+          final videoId = extractVideoId(data.googleMap??'');
+          if(videoId.isNotEmpty){
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => FullScreenPlayerScreen(videoId: videoId),
+                ));
+          }
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(topRight: Radius.circular(12),topLeft: Radius.circular(12)),
                   child: CachedNetworkImage(
                     imageUrl: data.thumb,
-                    width: 80,
-                    height: 80,
+                    width: double.infinity,
+                    height: size.height * 0.3,
                     fit: BoxFit.cover,
                     placeholder: (context, url) => const Icon(Icons.image_outlined),
                     errorWidget: (context, url, error) =>
-                        const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    const Icon(Icons.broken_image, size: 50, color: Colors.grey),
                   ),
                 ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      data.title,
-                      style: TextStyle(
-                        fontSize: width * 0.045,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.black87,
-                      ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 8),
+                  child: Text(
+                    data.title,
+                    maxLines: 3,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      fontSize: size.width * 0.040,
+                      fontWeight: FontWeight.normal,
+                      color: Colors.black87,
                     ),
-                    const SizedBox(height: 4),
-                    // Text(
-                    //   "Department: ${data.department}",
-                    //   style: TextStyle(
-                    //     fontSize: width * 0.035,
-                    //     color: Colors.green.shade800,
-                    //     fontWeight: FontWeight.w500,
-                    //   ),
-                    // ),
-                    // const SizedBox(height: 6),
-                    Text(
-                      data.degree ?? data.details,
-                      maxLines: 2,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: width * 0.034,
-                        color: Colors.black87,
-                      ),
-                    ),
-                    const SizedBox(height: 10),
-                    ContactButtons(
-                      contactNumber: data.contact ?? '',
-                      link: data.link ?? data.googleMap ?? '',
-                    )
-                  ],
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
-      ),
-    );
+      );
+    }
+
+    //dorshonio sthan
+    else if(categoryId=='139'){
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(data: data),
+              ));
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: EdgeInsets.zero,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                ClipRRect(
+                  borderRadius: const BorderRadius.only(topRight: Radius.circular(12),topLeft: Radius.circular(12)),
+                  child: CachedNetworkImage(
+                    imageUrl: data.thumb,
+                    width: double.infinity,
+                    height: size.height * 0.3,
+                    fit: BoxFit.cover,
+                    placeholder: (context, url) => const Icon(Icons.image_outlined),
+                    errorWidget: (context, url, error) =>
+                    const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16.0,horizontal: 8),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: size.width * 0.045,
+                          fontWeight: FontWeight.normal,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      if(data.upazila!=0)
+                      Row(
+                        spacing: 4,
+                        children: [
+                          const Icon(Icons.place,size: 16,color: Colors.green,),
+                          Text(
+                            Upazila.values[data.upazila].name,
+                            maxLines: 3,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              fontSize: size.width * 0.040,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.green,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    else if(categoryId == '9'){
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(data: data),
+              ));
+
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(width * 0.04),
+            child: Row(
+              children: [
+                GestureDetector(
+                  // onTap: () => _showImagePopup(context, data.thumb),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImage(imageUrl: data.thumb),));
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: data.thumb,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.image_outlined),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        style: TextStyle(
+                          fontSize: width * 0.045,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Text(
+                      //   "Department: ${data.department}",
+                      //   style: TextStyle(
+                      //     fontSize: width * 0.035,
+                      //     color: Colors.green.shade800,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 6),
+                      Text(
+                        data.degree ?? data.details,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: width * 0.034,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ContactButtons(
+                        contactNumber: data.contact ?? '',
+                        link: data.link ?? data.googleMap ?? '',
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    else{
+      return InkWell(
+        onTap: () {
+          _showDetailsDialog(context, data);
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(width * 0.04),
+            child: Row(
+              children: [
+                GestureDetector(
+                  // onTap: () => _showImagePopup(context, data.thumb),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImage(imageUrl: data.thumb),));
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: data.thumb,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.image_outlined),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        style: TextStyle(
+                          fontSize: width * 0.045,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      // Text(
+                      //   "Department: ${data.department}",
+                      //   style: TextStyle(
+                      //     fontSize: width * 0.035,
+                      //     color: Colors.green.shade800,
+                      //     fontWeight: FontWeight.w500,
+                      //   ),
+                      // ),
+                      // const SizedBox(height: 6),
+                      Text(
+                        data.degree ?? data.details,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: width * 0.034,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                      ContactButtons(
+                        contactNumber: data.contact ?? '',
+                        link: data.link ?? data.googleMap ?? '',
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+
   }
 
   void _showDetailsDialog(BuildContext context, Data data) {

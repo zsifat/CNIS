@@ -38,7 +38,7 @@ class AboutScreen extends ConsumerWidget {
                     radius: 32,
                   ),
                   const SizedBox(
-                    width: 6,
+                    width: 8,
                   ),
                   Expanded(
                       child: Column(
@@ -50,7 +50,7 @@ class AboutScreen extends ConsumerWidget {
                         style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
                       ),
                       Text(
-                        'ডেভেলপার',
+                        'Businessman',
                         textAlign: TextAlign.left,
                         style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
                       ),

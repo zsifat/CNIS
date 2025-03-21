@@ -224,6 +224,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           child: InkWell(
             onTap: () async {
+
+              //doctor
               if (category.id == 2) {
                 Navigator.push(
                     context,
@@ -235,6 +237,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   (element) => int.tryParse(element.categoryId ?? '0') == 2,
                                 )
                                 .toList())));
+
+                //blood
               } else if (category.id == 4) {
                 Navigator.push(
                     context,
@@ -248,6 +252,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   )
                                   .toList(),
                             )));
+
+                //kenakata
               } else if (category.id == 134) {
                 // Navigator.push(
                 //     context,
@@ -262,6 +268,44 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 .where(
                                   (element) => int.tryParse(element.categoryId ?? '0') == 134,
                                 )
+                                .toList())));
+                //house rent
+              } else if (category.id == 9) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 9,
+                            )
+                                .toList())));
+
+                //car rent
+              } else if (category.id == 10) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 10,
+                            )
+                                .toList())));
+
+                //worker
+              } else if (category.id == 16) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 16,
+                            )
                                 .toList())));
               } else {
                 Navigator.push(

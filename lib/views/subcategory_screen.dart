@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/views/DataScreen.dart';
@@ -45,7 +44,15 @@ class SubcategoryPage extends StatelessWidget {
   Widget _subcategoryItem(SubCategory subcategory, BuildContext context, double width) {
     return GestureDetector(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => DataScreen(id: subcategory.categoryId!, title: categoryName,subCategoryId: subcategory.id!.toInt(),),));
+        Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => DataScreen(
+                id: subcategory.categoryId!,
+                title: categoryName,
+                subCategoryId: subcategory.id!.toInt(),
+              ),
+            ));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -59,8 +66,7 @@ class SubcategoryPage extends StatelessWidget {
             children: [
               CachedNetworkImage(
                   errorWidget: (context, url, error) {
-                    return SvgPicture.asset('assets/images/${subcategory.categoryId}.svg',
-                        width: 60, height: 60);
+                    return const Icon(Icons.broken_image);
                   },
                   placeholder: (context, url) {
                     return CircularProgressIndicator(

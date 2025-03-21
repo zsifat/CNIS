@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../models/subCategory.dart';
 import '../viewmodels/data_viewmodel.dart';
+import '../viewmodels/search_text_viewmodel.dart';
 import '../viewmodels/selected_upazila_provider.dart';
 
 class ShoppingDetailsScreen extends ConsumerStatefulWidget {
@@ -28,19 +29,22 @@ class ShoppingDetailsScreen extends ConsumerStatefulWidget {
 
 class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
   int _selectedIndex = 0;
+  final _searchController = TextEditingController();
+
 
   @override
   void initState() {
     super.initState();
     _selectedIndex=widget.subcategories.first.id!.toInt();
-    // TODO: implement initState
     Future.microtask(
       () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id.toString()),
     );
   }
 
+
   @override
   Widget build(BuildContext context) {
+    final searchText = ref.watch(searchTextProvider);
     final dataState = ref.watch(dataNotifierProvider);
     final int selectedUpazilaFilterIndex = ref.watch(selectedUpazilaProvider);
     final filteredDataList = dataState.dataList.where(
@@ -50,6 +54,21 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
             selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex;
 
         return departmentMatch && upazilaMatch;
+      },
+    ).toList();
+
+    List<Data> searchFilteredDataList = filteredDataList.where(
+          (element) {
+        if (searchText.isNotEmpty) {
+          if (element.degree != null) {
+            return (element.details.contains(searchText) ||
+                element.title.contains(searchText) ||
+                element.degree!.contains(searchText));
+          }
+          return (element.details.contains(searchText) ||
+              element.title.contains(searchText));
+        }
+        return true;
       },
     ).toList();
 
@@ -63,7 +82,41 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
               _buildOption(widget.subcategories.last),
             ],
           ),
-          Expanded(child: _buildNewProductContent(dataState, filteredDataList)),
+          const SizedBox(
+            height: 8,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: SearchBar(
+              backgroundColor: WidgetStateProperty.all(Colors.white),
+              elevation: WidgetStateProperty.all(0),
+              controller: _searchController,
+              hintText: 'সার্চ করুন',
+              leading: const Icon(Icons.search),
+              trailing: [
+                InkWell(
+                    onTap: () {
+                      _searchController.clear(); // Clear the controller text
+                      ref.read(searchTextProvider.notifier).clearSearchText();
+                    },
+                    child: const Icon(Icons.clear)),
+              ],
+              shape: WidgetStateProperty.all(RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(16),
+                  side: const BorderSide(color: Colors.grey))),
+              onChanged: (value) {
+                ref.read(searchTextProvider.notifier).updateSearchText(value);
+              },
+              onSubmitted: (value) {
+                ref.read(searchTextProvider.notifier).updateSearchText(value);
+              },
+              textInputAction: TextInputAction.done,
+            ),
+          ),
+          const SizedBox(
+            height: 4,
+          ),
+          Expanded(child: _buildNewProductContent(dataState, searchFilteredDataList)),
         ],
       ),
     );
@@ -128,6 +181,7 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
     }
 
     return ListView.builder(
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       itemCount: filteredDataList.length,
       itemBuilder: (context, index) {
         Data data = filteredDataList[index];

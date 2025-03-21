@@ -1,3 +1,4 @@
+import 'package:chapainawabganjcity/views/widgets/photo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chapainawabganjcity/models/news.dart';
@@ -17,7 +18,8 @@ class NewsDetailScreen extends StatelessWidget {
             // SliverAppBar with CachedNetworkImage and tap to view full image
             GestureDetector(
               onTap: () {
-                _showFullImage(context, news.image);
+                // _showFullImage(context, news.image);
+                Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImage(imageUrl: news.image),));
               },
               child: CachedNetworkImage(
                 imageUrl: news.image,

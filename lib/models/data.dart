@@ -45,7 +45,7 @@ class Data {
   factory Data.fromJson(Map<String, dynamic> json) {
     return Data(
       id: json['id'],
-      title: json['title'],
+      title: json['title'] ?? '',
       department: json['depertment'] ?? '',
       upazila: int.tryParse(json['upazilla'].toString()) ?? 0,
       details: json['details'] ?? '',
