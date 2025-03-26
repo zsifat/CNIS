@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
 import 'package:chapainawabganjcity/views/details_screen.dart';
 import 'package:chapainawabganjcity/views/widgets/photo_view.dart';
@@ -11,8 +12,9 @@ import '../../models/data.dart';
 class DataCard extends StatelessWidget {
   final Data data;
   final String categoryId;
+  final SubCategory? subcategory;
 
-  const DataCard({super.key, required this.data, this.categoryId = ''});
+  const DataCard({super.key, required this.data, this.categoryId = '', this.subcategory});
 
   String extractVideoId(String url) {
     final uri = Uri.parse(url);
@@ -160,6 +162,7 @@ class DataCard extends StatelessWidget {
       );
     }
 
+    //home rent
     else if(categoryId == '9'){
       return InkWell(
         onTap: () {
@@ -169,6 +172,428 @@ class DataCard extends StatelessWidget {
                 builder: (context) => DetailsScreen(data: data),
               ));
 
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12)
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                child: CachedNetworkImage(
+                  imageUrl: data.thumb,
+                  width: double.infinity,
+                  height: 140,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Icon(Icons.image_outlined),
+                  errorWidget: (context, url, error) =>
+                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                ),
+              ),
+              // ContactButtons(
+              //   contactNumber: data.contact ?? '',
+              //   link: data.link ?? data.googleMap ?? '',
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 10,
+                  children: [
+                    Text(
+                      data.title,
+                      style: TextStyle(
+                        fontSize: width * 0.045,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            spacing: 6,
+                            children: [
+                              CircleAvatar(
+                                radius: 20,
+                                  backgroundColor: Colors.grey.shade300,
+                                  child: const Icon(Icons.home,color: Colors.grey,)),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'বাসার ধরন',
+                                    style: TextStyle(
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    subcategory!.title ?? '',
+                                    style: TextStyle(
+                                      fontSize: width * 0.030,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 6,
+                            children: [
+                              CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.grey.shade300,
+                                  child: const Icon(Icons.place,color: Colors.grey,)),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'ঠিকানা',
+                                    style: TextStyle(
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                     maxHeight: double.infinity,
+                                      maxWidth: size.width* 0.25,
+                                    ),
+
+                                    child: Text(
+                                      maxLines: 3,
+                                      data.address ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: width * 0.030,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    //blood
+    else if(categoryId == '4'){
+      return InkWell(
+        onTap: () {
+          _showDetailsDialog(context, data);
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Padding(
+            padding: EdgeInsets.all(width * 0.04),
+            child: Row(
+              children: [
+                GestureDetector(
+                  // onTap: () => _showImagePopup(context, data.thumb),
+                  onTap: () {
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => FullScreenImage(imageUrl: data.thumb),));
+                  },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8),
+                    child: CachedNetworkImage(
+                      imageUrl: data.thumb,
+                      width: 80,
+                      height: 80,
+                      fit: BoxFit.cover,
+                      placeholder: (context, url) => const Icon(Icons.image_outlined),
+                      errorWidget: (context, url, error) =>
+                      const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        data.title,
+                        style: TextStyle(
+                          fontSize: width * 0.045,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      if(data.address!=null)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 6,
+                        children: [
+                          CircleAvatar(
+                              radius: 14,
+                              backgroundColor: Colors.grey.shade300,
+                              child: const Icon(Icons.place,color: Colors.grey,size: 16,)),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                              maxWidth: size.width * 0.5
+                            ),
+                            child: Text(
+                              data.address ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: width * 0.038,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6,),
+                      if(data.bloodGroup!=null)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 6,
+                        children: [
+                          CircleAvatar(
+                              radius: 14,
+                              backgroundColor: Colors.grey.shade300,
+                              child: const Icon(Icons.bloodtype,color: Colors.grey,size: 16,)),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxWidth: size.width * 0.5
+                            ),
+                            child: Text(
+                              data.bloodGroup ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                fontSize: width * 0.038,
+                                color: Colors.black87,
+                                fontWeight: FontWeight.bold
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 6,),
+                      if(data.contact.isNotEmpty)
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        spacing: 6,
+                        children: [
+                          CircleAvatar(
+                              radius: 14,
+                              backgroundColor: Colors.grey.shade300,
+                              child: const Icon(Icons.call,color: Colors.grey,size: 16,)),
+                          ConstrainedBox(
+                            constraints: BoxConstraints(
+                                maxWidth: size.width * 0.5
+                            ),
+                            child: Text(
+                              data.contact ?? '',
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                  fontSize: width * 0.038,
+                                  color: Colors.black87,
+                                  fontWeight: FontWeight.w400
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 10),
+                      ContactButtons(
+                        contactNumber: data.contact ?? '',
+                        link: data.link ?? data.googleMap ?? '',
+                      )
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
+    }
+
+    else if(categoryId == '148'){
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(data: data),
+              ));
+
+        },
+        child: Card(
+          color: Colors.white,
+          elevation: 2,
+          shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(12)
+          ),
+          child: Column(
+            children: [
+              ClipRRect(
+                borderRadius: const BorderRadius.only(topLeft: Radius.circular(12),topRight: Radius.circular(12)),
+                child: CachedNetworkImage(
+                  imageUrl: data.thumb,
+                  width: double.infinity,
+                  height: 140,
+                  fit: BoxFit.cover,
+                  placeholder: (context, url) => const Icon(Icons.image_outlined),
+                  errorWidget: (context, url, error) =>
+                  const Icon(Icons.broken_image, size: 50, color: Colors.grey),
+                ),
+              ),
+              // ContactButtons(
+              //   contactNumber: data.contact ?? '',
+              //   link: data.link ?? data.googleMap ?? '',
+              // ),
+              Padding(
+                padding: const EdgeInsets.all(12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      data.title,
+                      style: TextStyle(
+                        fontSize: width * 0.042,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.black87,
+                      ),
+                    ),
+                    const SizedBox(height: 8,),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Expanded(
+                          child: Row(
+                            spacing: 6,
+                            children: [
+                              CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.grey.shade300,
+                                  child: const Icon(Icons.phone,color: Colors.grey,)),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'যোগাযোগ',
+                                    style: TextStyle(
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  Text(
+                                    data.contact ?? '',
+                                    style: TextStyle(
+                                      fontSize: width * 0.030,
+                                      fontWeight: FontWeight.w400,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            spacing: 6,
+                            children: [
+                              CircleAvatar(
+                                  radius: 20,
+                                  backgroundColor: Colors.grey.shade300,
+                                  child: const Icon(Icons.place,color: Colors.grey,)),
+
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'ঠিকানা',
+                                    style: TextStyle(
+                                      fontSize: width * 0.035,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black87,
+                                    ),
+                                  ),
+                                  ConstrainedBox(
+                                    constraints: BoxConstraints(
+                                      maxHeight: double.infinity,
+                                      maxWidth: size.width* 0.25,
+                                    ),
+
+                                    child: Text(
+                                      maxLines: 3,
+                                      data.address ?? '',
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: width * 0.030,
+                                        fontWeight: FontWeight.w400,
+                                        color: Colors.black87,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
+
+    else if(categoryId == '13' || categoryId == '12' || categoryId == '134'){
+      return InkWell(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => DetailsScreen(data: data),
+              ));
         },
         child: Card(
           color: Colors.white,
@@ -244,6 +669,7 @@ class DataCard extends StatelessWidget {
         ),
       );
     }
+
 
     else{
       return InkWell(

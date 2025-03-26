@@ -53,7 +53,7 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
     final allNews = ref.watch(newsProvider);
 
     return Scaffold(
-      appBar: buildAppBar('নোটিশ'),
+      appBar: buildAppBar("নোটিফিকেশন"),
       body: isOffline
           ? buildNoInternet()
           : RefreshIndicator(

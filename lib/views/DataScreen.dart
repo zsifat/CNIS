@@ -1,4 +1,5 @@
 import 'package:chapainawabganjcity/models/data.dart';
+import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
 import 'package:chapainawabganjcity/viewmodels/data_viewmodel.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
@@ -8,6 +9,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:marquee/marquee.dart';
 
 import '../viewmodels/search_text_viewmodel.dart';
 import '../viewmodels/selected_upazila_provider.dart';
@@ -15,9 +17,9 @@ import '../viewmodels/selected_upazila_provider.dart';
 class DataScreen extends ConsumerStatefulWidget {
   final String id;
   final String title;
-  final int? subCategoryId;
+  final SubCategory? subCategory;
 
-  const DataScreen({super.key, required this.id, required this.title, this.subCategoryId});
+  const DataScreen({super.key, required this.id, required this.title, this.subCategory});
 
   @override
   ConsumerState<DataScreen> createState() => _DataScreenState();
@@ -65,11 +67,11 @@ class _DataScreenState extends ConsumerState<DataScreen> {
         .toSet();
     final filteredDataList = dataState.dataList.where(
       (element) {
-        if (widget.subCategoryId != null) {
+        if (widget.subCategory != null) {
           // Check if department is not null before comparing, or handle null safely
           return (element.department != null &&
                   element.department!.isNotEmpty &&
-                  int.parse(element.department!) == widget.subCategoryId) &&
+                  int.parse(element.department!) == widget.subCategory!.id!.toInt()) &&
               (selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex);
         }
         return selectedUpazilaFilterIndex == 0 || element.upazila == selectedUpazilaFilterIndex;
@@ -80,12 +82,12 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       (element) {
         if (searchText.isNotEmpty) {
           if (element.degree != null) {
-            return (element.details.contains(searchText) ||
-                element.title.contains(searchText) ||
-                element.degree!.contains(searchText));
+            return (element.details.toLowerCase().contains(searchText) ||
+                element.title.toLowerCase().contains(searchText) ||
+                element.degree!.toLowerCase().contains(searchText));
           }
-          return (element.details.contains(searchText) ||
-              element.title.contains(searchText));
+          return (element.details.toLowerCase().contains(searchText) ||
+              element.title.toLowerCase().contains(searchText));
         }
         return true;
       },
@@ -110,6 +112,20 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if(widget.id=='13')
+                      SizedBox(
+                      height: 30,
+                      width: double.infinity,
+                      child: Marquee(
+                        text: "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত চাকরির তথ্য সংশ্লিষ্ট নিয়োগকারী প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। নিয়োগ প্রক্রিয়া ও দায়িত্ব সম্পূর্ণভাবে সংশ্লিষ্ট প্রতিষ্ঠানগুলোর। এ বিষয়ে কোনো লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।",
+                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.green.shade800),
+                        scrollAxis: Axis.horizontal,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        blankSpace: 20.0,
+                        velocity: 60.0,
+                        startPadding: 10.0,
+                      ),
+                    ),
                     const SizedBox(height: 4),
                     SearchBar(
                       backgroundColor: WidgetStateProperty.all(Colors.white),
@@ -197,6 +213,7 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                                     return DataCard(
                                       data: data,
                                       categoryId: data.catId,
+                                      subcategory: widget.subCategory,
                                     );
                                   },
                                 ),

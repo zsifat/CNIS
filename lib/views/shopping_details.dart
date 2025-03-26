@@ -35,7 +35,7 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    _selectedIndex=widget.subcategories.first.id!.toInt();
+    _selectedIndex=widget.subcategories.last.id!.toInt();
     Future.microtask(
       () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id.toString()),
     );
@@ -61,12 +61,12 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
           (element) {
         if (searchText.isNotEmpty) {
           if (element.degree != null) {
-            return (element.details.contains(searchText) ||
-                element.title.contains(searchText) ||
-                element.degree!.contains(searchText));
+            return (element.details.toLowerCase().contains(searchText) ||
+                element.title.toLowerCase().contains(searchText) ||
+                element.degree!.toLowerCase().contains(searchText));
           }
-          return (element.details.contains(searchText) ||
-              element.title.contains(searchText));
+          return (element.details.toLowerCase().contains(searchText) ||
+              element.title.toLowerCase().contains(searchText));
         }
         return true;
       },
@@ -78,8 +78,8 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
         children: [
           Row(
             children: [
-              _buildOption(widget.subcategories.first),
               _buildOption(widget.subcategories.last),
+              _buildOption(widget.subcategories.first),
             ],
           ),
           const SizedBox(
@@ -187,6 +187,7 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
         Data data = filteredDataList[index];
         return DataCard(
           data: data,
+          categoryId: widget.id.toString(),
         );
       },
     );

@@ -19,52 +19,60 @@ class NewAppDrawer extends ConsumerWidget {
     final aboutState = ref.watch(aboutViewModelProvider);
     return Drawer(
       backgroundColor: Colors.white,
-      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.only(topRight: Radius.circular(20))),
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(topRight: Radius.circular(20))),
       width: 260,
       child: SafeArea(
         child: Column(
           children: [
-            // Drawer Header with Image and Title
-            // DrawerHeader(
-            //   decoration: BoxDecoration(
-            //     color: Colors.white,
-            //   ),
-            //   child: Column(
-            //     crossAxisAlignment: CrossAxisAlignment.center,
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     children: [
-            //       Image.asset(
-            //         'assets/images/logo-CNIS.png', // Replace with your logo
-            //         width: 100,
-            //         height: 100,
-            //         fit: BoxFit.cover,
-            //       ),
-            //     ],
-            //   ),
-            // ),
-        
             // Scrollable Content to Prevent Overflow
             Expanded(
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const Center(
+                      child: Text(
+                        'পরিকল্পনা ও বাস্তবায়ন',
+                        style: TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
+                      ),
+                    ),
+                    const SizedBox(height: 12,),
+                    Center(
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(35),
+                        child: Image.asset(
+                          'assets/images/pp.png', // Replace with your logo
+                          width: 70,
+                          height: 70,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 6,),
+                    const Center(
+                      child: Text(
+                        'তৌফিকুল ইসলাম',
+                        style: TextStyle(fontWeight: FontWeight.w500, fontSize: 14),
+                      ),
+                    ),
+                    Divider(color: Colors.grey.shade300),
                     _buildDrawerItem(Icons.home, "হোম", () {
                       // Navigate to Home screen
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => MainScreen(),
+                        builder: (context) => const MainScreen(),
                       ));
                     }),
-                    _buildDrawerItem(Icons.campaign, "নোটিশ", () {
+                    _buildDrawerItem(Icons.campaign, "নোটিফিকেশন", () {
                       // Navigate to Notification screen
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => NoticeScreen(),
+                        builder: (context) => const NoticeScreen(),
                       ));
                     }),
                     _buildDrawerItem(Icons.newspaper, 'বিজ্ঞাপন', () {
                       // Navigate to Notification screen
                       Navigator.of(context).push(MaterialPageRoute(
-                        builder: (context) => AdvertisementScreen(),
+                        builder: (context) => const AdvertisementScreen(),
                       ));
                     }),
                     _buildDrawerItem(Icons.account_circle, "প্রোফাইল", () {
@@ -72,21 +80,24 @@ class NewAppDrawer extends ConsumerWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => AboutScreen(),
+                          builder: (context) => const AboutScreen(),
                         ),
                       );
                     }),
-        
+
                     Divider(color: Colors.grey.shade300),
-        
+
                     // Social Media Section
                     _buildSectionHeader("যোগাযোগ করুন"),
-                    _buildSocialMediaButton(FontAwesomeIcons.facebookF, aboutState.about!.facebook,'ফেসবুক গ্রুপ'),
-                    _buildSocialMediaButton(FontAwesomeIcons.instagram, aboutState.about!.instagram,'ইনস্ট্রাগ্রাম'),
-                    _buildSocialMediaButton(FontAwesomeIcons.youtube, aboutState.about!.linkdin,"ইউটিউব"),
-        
+                    _buildSocialMediaButton(
+                        FontAwesomeIcons.facebookF, aboutState.about!.facebook, 'ফেসবুক গ্রুপ'),
+                    _buildSocialMediaButton(
+                        FontAwesomeIcons.instagram, aboutState.about!.instagram, 'ইনস্ট্রাগ্রাম'),
+                    _buildSocialMediaButton(
+                        FontAwesomeIcons.youtube, aboutState.about!.linkdin, "ইউটিউব"),
+
                     Divider(color: Colors.grey.shade300),
-        
+
                     // Support Section
                     _buildSectionHeader("সাপোর্ট"),
                     _buildDrawerItem(Icons.email_outlined, 'ইমেইল করুন', () {
@@ -98,15 +109,17 @@ class NewAppDrawer extends ConsumerWidget {
                     _buildDrawerItem(Icons.message, "মেসেজ করুন", () {
                       _launchSMS(aboutState.about!.phone);
                     }),
-        
+
                     Divider(color: Colors.grey.shade300),
-        
+
                     // Other Actions
                     _buildSectionHeader("অন্যান্য"),
                     _buildDrawerItem(Icons.share, "শেয়ার করুন", () {
                       shareApp();
                     }),
-                    SizedBox(height: 8,)
+                    SizedBox(
+                      height: 8,
+                    )
                   ],
                 ),
               ),
@@ -220,7 +233,7 @@ class NewAppDrawer extends ConsumerWidget {
     }
   }
 
-  void shareApp() async{
+  void shareApp() async {
     await Share.share('https://play.google.com/store/apps/details?id=com.ebexsoft.cnis');
   }
 }

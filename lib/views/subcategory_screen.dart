@@ -50,7 +50,7 @@ class SubcategoryPage extends StatelessWidget {
               builder: (context) => DataScreen(
                 id: subcategory.categoryId!,
                 title: categoryName,
-                subCategoryId: subcategory.id!.toInt(),
+                subCategory: subcategory,
               ),
             ));
       },
@@ -69,9 +69,7 @@ class SubcategoryPage extends StatelessWidget {
                     return const Icon(Icons.broken_image);
                   },
                   placeholder: (context, url) {
-                    return CircularProgressIndicator(
-                      color: Colors.green.shade800,
-                    );
+                    return const Icon(Icons.image_outlined);
                   },
                   imageUrl: subcategory.image!,
                   width: 80,

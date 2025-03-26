@@ -48,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.campaign),
-            label: 'নোটিশ',
+            label: "নোটিফিকেশন",
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.newspaper), // Megaphone Icon

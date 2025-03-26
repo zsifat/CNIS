@@ -5,7 +5,7 @@ class SearchTextNotifier extends StateNotifier<String> {
 
   // Method to update search text
   void updateSearchText(String newText) {
-    state = newText;
+    state = newText.toLowerCase();
   }
 
   // Method to clear the search text
