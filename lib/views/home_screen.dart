@@ -14,6 +14,7 @@ import 'package:chapainawabganjcity/models/category.dart';
 import 'package:chapainawabganjcity/viewmodels/category_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
+import 'package:marquee/marquee.dart';
 import '../viewmodels/about_viewmodel.dart';
 import '../viewmodels/sub_category_viewmodel.dart';
 import 'DataScreen.dart';
@@ -59,9 +60,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                const SizedBox(height: 10,),
+                SizedBox(
+                  height: 30,
+                  width: double.infinity,
+                  child: Marquee(
+                    text: "চাঁপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপসটি খুব শিঘ্রই শুভ উদ্বোধনী অনুষ্ঠানের আয়োজন হতে যাচ্ছে। তাই দ্রুত তথ্যটি শেয়ার করুন। প্লে স্টোর অ্যাপসের সার্চ বাটনে CNIS লিখে সার্চ করুন, আর ইনস্টল করুন তথ্য সেবা অ্যাপসটি। আজই আপনার বিজ্ঞাপন দিয়ে আমাদের সহযোগিতা করুন,আপনাদের সহযোগিতা আমাদের কাম্য।",
+                    style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.green.shade800),
+                    scrollAxis: Axis.horizontal,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    blankSpace: 20.0,
+                    velocity: 60.0,
+                    startPadding: 10.0,
+                  ),
+                ),
                 // Carousel Slider with Dot Indicator
                 Container(
-                  padding: const EdgeInsets.symmetric(vertical: 10),
                   height: height * 0.3,
                   child: Column(
                     children: [
@@ -161,8 +175,6 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                     },
                   ),
                 ),
-                const SizedBox(height: 10),
-
                 // Section Heading
                 Padding(
                   padding: const EdgeInsets.symmetric(vertical: 10.0),
@@ -201,7 +213,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
   // Grid View Widget for categories
   Widget _gridviewWidget(List<Category> categories, double width, List<SubCategory> subCategories) {
     return GridView.builder(
-      padding: EdgeInsets.zero,
+      padding: const EdgeInsets.only(bottom: 20),
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       itemCount: categories.length,
@@ -239,7 +251,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 .toList())));
 
                 //blood
-              } else if (category.id == 4) {
+              }
+              else if (category.id == 4) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -254,7 +267,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             )));
 
                 //kenakata
-              } else if (category.id == 134) {
+              }
+              else if (category.id == 134) {
                 // Navigator.push(
                 //     context,
                 //     MaterialPageRoute(
@@ -270,7 +284,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 )
                                 .toList())));
                 //house rent
-              } else if (category.id == 9) {
+              }
+              else if (category.id == 9) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -305,6 +320,28 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             subcategories: subCategories
                                 .where(
                                   (element) => int.tryParse(element.categoryId ?? '0') == 16,
+                            )
+                                .toList())));
+              } else if (category.id == 17) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 17,
+                            )
+                                .toList())));
+              } else if (category.id == 149) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SubcategoryPage(
+                            categoryName: category.title,
+                            subcategories: subCategories
+                                .where(
+                                  (element) => int.tryParse(element.categoryId ?? '0') == 149,
                             )
                                 .toList())));
               } else {

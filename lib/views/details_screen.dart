@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chapainawabganjcity/models/data.dart';
+import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/photo_view.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -12,135 +13,135 @@ class DetailsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
-    return SafeArea(
-      child: Scaffold(
-        floatingActionButton: FloatingActionButton(
-          onPressed: () {
-            _dialPhoneNumber(data.contact);
-          },
-          backgroundColor: Colors.green,
-          child: const Icon(
-            Icons.call,
-            color: Colors.white,
-            size: 24,
-          ),
+    return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          _dialPhoneNumber(data.contact);
+        },
+        backgroundColor: Colors.green,
+        child: const Icon(
+          Icons.call,
+          color: Colors.white,
+          size: 24,
         ),
-        body: SingleChildScrollView(
-          // Make the content scrollable
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Rounded Image at the top
-              InkWell(
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => FullScreenImage(imageUrl: data.thumb),
-                      ));
+      ),
+      appBar: buildAppBar(data.title,centerTitle: false),
+      body: SingleChildScrollView(
+        // Make the content scrollable
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Rounded Image at the top
+            InkWell(
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => FullScreenImage(imageUrl: data.thumb),
+                    ));
+              },
+              child: CachedNetworkImage(
+                imageUrl: data.thumb,
+                placeholder: (context, url) {
+                  return const Icon(Icons.image);
                 },
-                child: CachedNetworkImage(
-                  imageUrl: data.thumb,
-                  placeholder: (context, url) {
-                    return const Icon(Icons.image);
-                  },
-                  width: double.infinity, // Full width
-                  fit: BoxFit.cover,
-                ),
+                width: double.infinity, // Full width
+                fit: BoxFit.cover,
               ),
-              Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        _openLink(data.googleMap ?? data.link ?? '');
-                      },
-                      child: Text(
-                        '${data.title} 🔗',
-                        maxLines: 3,
-                        style: const TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      _openLink(data.googleMap ?? data.link ?? '');
+                    },
+                    child: Text(
+                      '${data.title} 🔗',
+                      maxLines: 3,
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    const SizedBox(height: 8,),
-                    if (data.address != null)
-                      Row(
-                        children: [
-                          CircleAvatar(
-                              radius: 14,
-                              backgroundColor: Colors.grey.shade300,
-                              child: const Icon(
-                                Icons.place,
-                                size: 14,
-                                color: Colors.grey,
-                              )),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Expanded(
-                            child: Text(
-                              data.address ?? '',
-                              maxLines: 4,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.justify,
-                              style: const TextStyle(fontSize: 14),
-                            ),
-                          ),
-                        ],
-                      ),
-                    if (data.address != null)
-                    const SizedBox(height: 8,),
-                    if (data.contact.isNotEmpty)
-                      Row(
-                        children: [
-                          CircleAvatar(
-                              radius: 14,
-                              backgroundColor: Colors.grey.shade300,
-                              child: const Icon(
-                                Icons.phone,
-                                size: 14,
-                                color: Colors.grey,
-                              )),
-                          const SizedBox(
-                            width: 8,
-                          ),
-                          Text(
-                            data.contact,
+                  ),
+                  const SizedBox(height: 8,),
+                  if (data.address != null)
+                    Row(
+                      children: [
+                        CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.place,
+                              size: 14,
+                              color: Colors.grey,
+                            )),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Expanded(
+                          child: Text(
+                            data.address ?? '',
                             maxLines: 4,
                             overflow: TextOverflow.ellipsis,
                             textAlign: TextAlign.justify,
                             style: const TextStyle(fontSize: 14),
                           ),
-                        ],
-                      ),
-                    const SizedBox(
-                      height: 16,
+                        ),
+                      ],
                     ),
-                    // Padding for the headline and details below the image
-                    const Text(
-                      'বিস্তারিত',
-                      style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                  if (data.address != null)
+                  const SizedBox(height: 8,),
+                  if (data.contact.isNotEmpty)
+                    Row(
+                      children: [
+                        CircleAvatar(
+                            radius: 14,
+                            backgroundColor: Colors.grey.shade300,
+                            child: const Icon(
+                              Icons.phone,
+                              size: 14,
+                              color: Colors.grey,
+                            )),
+                        const SizedBox(
+                          width: 8,
+                        ),
+                        Text(
+                          data.contact,
+                          maxLines: 4,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.justify,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                      ],
                     ),
-                    const SizedBox(
-                      height: 4,
+                  const SizedBox(
+                    height: 16,
+                  ),
+                  // Padding for the headline and details below the image
+                  const Text(
+                    'বিস্তারিত',
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
                     ),
-                    Text(
-                      data.details,
-                      textAlign: TextAlign.justify,
-                      style: const TextStyle(fontSize: 16),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
+                  ),
+                  const SizedBox(
+                    height: 4,
+                  ),
+                  Text(
+                    data.details,
+                    textAlign: TextAlign.justify,
+                    style: const TextStyle(fontSize: 16),
+                  ),
+                  const SizedBox(height: 60,)
+                ],
+              ),
+            )
+          ],
         ),
       ),
     );

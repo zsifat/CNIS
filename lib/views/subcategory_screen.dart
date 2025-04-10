@@ -23,9 +23,9 @@ class SubcategoryPage extends StatelessWidget {
         backgroundColor: Colors.green.shade800,
       ),
       body: Padding(
-        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical: height * 0.02),
+        padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical:0),
         child: GridView.builder(
-          padding: EdgeInsets.zero,
+          padding: const EdgeInsets.only(top:10,bottom:20),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: width > 600 ? 4 : 3, // Responsive grid columns based on screen width
             crossAxisSpacing: 10,
@@ -66,10 +66,10 @@ class SubcategoryPage extends StatelessWidget {
             children: [
               CachedNetworkImage(
                   errorWidget: (context, url, error) {
-                    return const Icon(Icons.broken_image);
+                    return Icon(Icons.broken_image,color: Colors.grey.shade500,);
                   },
                   placeholder: (context, url) {
-                    return const Icon(Icons.image_outlined);
+                    return Icon(Icons.image_outlined,color: Colors.grey.shade500,);
                   },
                   imageUrl: subcategory.image!,
                   width: 80,

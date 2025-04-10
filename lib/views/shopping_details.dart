@@ -5,6 +5,7 @@ import 'package:chapainawabganjcity/views/widgets/data_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:marquee/marquee.dart';
 
 import '../models/subCategory.dart';
 import '../viewmodels/data_viewmodel.dart';
@@ -72,6 +73,11 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
       },
     ).toList();
 
+    String? marqueeText;
+    if (widget.id == 4) {
+      marqueeText = "প্রতারক হতে সতকর্তা অবলম্বন করুন। নিজ দায়িত্বে যাচাই করে রক্তদান করুন। সচেতনতায় চাঁপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS)। ";
+    }
+
     return Scaffold(
       appBar: buildAppBar(widget.title),
       body: Column(
@@ -82,9 +88,21 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
               _buildOption(widget.subcategories.first),
             ],
           ),
-          const SizedBox(
-            height: 8,
-          ),
+          const SizedBox(height: 10,),
+          if(marqueeText!=null)
+            SizedBox(
+              height: 30,
+              width: double.infinity,
+              child: Marquee(
+                text: marqueeText,
+                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.green.shade800),
+                scrollAxis: Axis.horizontal,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                blankSpace: 20.0,
+                velocity: 60.0,
+                startPadding: 10.0,
+              ),
+            ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8.0),
             child: SearchBar(

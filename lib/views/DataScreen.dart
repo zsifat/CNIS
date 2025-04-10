@@ -98,6 +98,13 @@ class _DataScreenState extends ConsumerState<DataScreen> {
     double width = mediaQuery.size.width;
     double height = mediaQuery.size.height;
 
+    String? marqueeText;
+    if (widget.id == '13') {
+      marqueeText = "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত চাকরির তথ্য সংশ্লিষ্ট নিয়োগকারী প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। নিয়োগ প্রক্রিয়া ও দায়িত্ব সম্পূর্ণভাবে সংশ্লিষ্ট প্রতিষ্ঠানগুলোর। এ বিষয়ে কোনো লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
+    } else if (['1','2','10','15'].contains(widget.id)) {
+      marqueeText = "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত সকল তথ্য সংশ্লিষ্ট ব্যাক্তি বা প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। কোনো ধরনের লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
+    }
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop, result) {
@@ -112,12 +119,12 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if(widget.id=='13')
+                    if(marqueeText!=null)
                       SizedBox(
                       height: 30,
                       width: double.infinity,
                       child: Marquee(
-                        text: "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত চাকরির তথ্য সংশ্লিষ্ট নিয়োগকারী প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। নিয়োগ প্রক্রিয়া ও দায়িত্ব সম্পূর্ণভাবে সংশ্লিষ্ট প্রতিষ্ঠানগুলোর। এ বিষয়ে কোনো লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।",
+                        text: marqueeText,
                         style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.green.shade800),
                         scrollAxis: Axis.horizontal,
                         crossAxisAlignment: CrossAxisAlignment.start,

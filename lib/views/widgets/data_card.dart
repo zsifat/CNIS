@@ -586,7 +586,7 @@ class DataCard extends StatelessWidget {
       );
     }
 
-    else if(categoryId == '13' || categoryId == '12' || categoryId == '134'){
+    else if(['13', '12', '134', '15', '132','150'].contains(categoryId)){
       return InkWell(
         onTap: () {
           Navigator.push(
