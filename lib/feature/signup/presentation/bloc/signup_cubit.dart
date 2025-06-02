@@ -1,0 +1,38 @@
+import 'package:chapainawabganjcity/core/network_service/api_client.dart';
+import 'package:chapainawabganjcity/core/network_service/api_constants.dart';
+import 'package:chapainawabganjcity/feature/signup/data/repository/auth_repository.dart';
+import 'package:chapainawabganjcity/feature/signup/presentation/bloc/signup_state.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../core/shared_prefs_service/shared_pref_keys.dart';
+
+class SignupCubit extends Cubit<SignupState>{
+  SignupCubit():super(SignupInitial());
+  final _authRepository = AuthRepository();
+
+  Future<void> signUP({required String userName, required String email, required String password}) async{
+    emit(SignupLoading());
+    try{
+      final response =await _authRepository.signUP(userName: userName, email: email, password: password);
+      final prefs = await SharedPreferences.getInstance();
+      prefs.setString(SharedPrefKeys.userName, userName);
+      emit(SignupSuccess());
+    }catch(e){
+      emit(SignupFailed());
+      throw Exception(e);
+    }
+  }
+
+  Future<void> login({required String email, required String password}) async{
+    emit(SignupLoading());
+    try{
+      final response =await _authRepository.login(email: email, password: password);
+      print(response.data);
+      emit(SignupSuccess());
+    }catch(e){
+      emit(SignupFailed());
+      throw Exception(e);
+    }
+  }
+}

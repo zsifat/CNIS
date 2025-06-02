@@ -1,3 +1,4 @@
+import 'package:chapainawabganjcity/feature/login/presentation/presentation/view/login_screen.dart';
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/states/aboutState.dart';
 import 'package:chapainawabganjcity/views/advertisement_screen.dart';
@@ -9,6 +10,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class AboutScreen extends ConsumerWidget {
@@ -201,7 +204,42 @@ class AboutScreen extends ConsumerWidget {
             buildItems(
               'লগআউট করুন',
               FontAwesomeIcons.arrowRightFromBracket,
-              () {},
+              () async{
+                final prefs = await SharedPreferences.getInstance();
+                prefs.clear();
+                Get.offAll(const LoginScreen());
+              },
+            ),
+            const SizedBox(height: 10),
+
+            Container(
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: const Color(0xFFFAF3E0),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: const Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Disclaimer',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: Colors.black87),),
+                  SizedBox(height: 6,),
+                  Text(
+                    'এই অ্যাপটি কোনো সরকারি সংস্থার সাথে সম্পর্কিত বা অনুমোদিত নয়। '
+                        'সব তথ্য পাবলিক উৎস থেকে সংগৃহীত এবং শুধুমাত্র ব্যবহারকারীদের সুবিধার্থে প্রদান করা হয়েছে।',
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.black87,
+                    ),
+                    textAlign: TextAlign.justify,
+                  ),
+                  SizedBox(height: 6,),
+                  Text(
+                    'This app does not collect, store, or share any personal user data.',
+                    style: TextStyle(fontSize: 14, color: Colors.black87),
+                    textAlign: TextAlign.justify,
+                  ),
+                ],
+              ),
             ),
           ],
         ),

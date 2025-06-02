@@ -117,7 +117,7 @@ class NewAppDrawer extends ConsumerWidget {
                     _buildDrawerItem(Icons.share, "শেয়ার করুন", () {
                       shareApp();
                     }),
-                    SizedBox(
+                    const SizedBox(
                       height: 8,
                     )
                   ],

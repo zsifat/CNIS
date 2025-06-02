@@ -63,7 +63,8 @@ class _AdvertisementScreenState extends ConsumerState<AdvertisementScreen> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset('assets/images/logo-CNIS.png', scale: 12),
+                  Image.asset('assets/images/cnis_updated_logo.jpg', scale: 12),
+                  const SizedBox(height: 8,),
                   Text(
                     textAlign: TextAlign.center,
                     "যেকোনো ধরনের প্রতিষ্ঠান বা পণ্যের বিজ্ঞাপন দিতে যোগাযোগ করুন",

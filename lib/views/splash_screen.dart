@@ -1,3 +1,4 @@
+import 'package:chapainawabganjcity/feature/login/presentation/presentation/view/login_screen.dart';
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/category_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
@@ -6,6 +7,8 @@ import 'package:chapainawabganjcity/views/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -32,10 +35,17 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
 
     // Navigate to HomeScreen once the data has been fetched
     if(context.mounted) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const MainScreen()),
-      );
+      final prefs = await SharedPreferences.getInstance();
+      final isLogin = prefs.getBool('isLogin')??false;
+      if(isLogin){
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => const MainScreen()),
+        );
+      }else{
+        Get.offAll(const LoginScreen());
+      }
+
     }
 
 
@@ -51,7 +61,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           children: [
             // Logo image
             Image.asset(
-              'assets/images/logo-CNIS.png', // Adjust the image path as necessary
+              'assets/images/cnis_updated_logo.jpg', // Adjust the image path as necessary
               width: 200, // Adjust the width as per your design
               height: 200, // Adjust the height as per your design
             ),

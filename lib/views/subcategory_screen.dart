@@ -25,7 +25,7 @@ class SubcategoryPage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: width * 0.03, vertical:0),
         child: GridView.builder(
-          padding: const EdgeInsets.only(top:10,bottom:20),
+          padding: const EdgeInsets.only(top:10,bottom:80),
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: width > 600 ? 4 : 3, // Responsive grid columns based on screen width
             crossAxisSpacing: 10,
