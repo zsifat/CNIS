@@ -1,4 +1,4 @@
-import '../../models/category.dart';
+import '../../feature/home/data/model/category.dart';
 
 class CategoryState {
   final List<Category> categories;

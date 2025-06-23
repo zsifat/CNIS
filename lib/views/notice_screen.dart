@@ -7,6 +7,9 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:get/get.dart';
+
+import '../feature/data_add/presentation/view/data_add_screen.dart';
 
 class NoticeScreen extends ConsumerStatefulWidget {
   const NoticeScreen({super.key});
@@ -54,6 +57,17 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
 
     return Scaffold(
       appBar: buildAppBar("নোটিফিকেশন"),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade800,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 36,
+        ),
+        onPressed: () {
+          Get.to(const InputFormScreen(catId: '0'));
+        },
+      ),
       body: isOffline
           ? buildNoInternet()
           : RefreshIndicator(

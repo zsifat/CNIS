@@ -2,7 +2,10 @@ import 'package:chapainawabganjcity/views/widgets/photo_view.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chapainawabganjcity/models/news.dart';
+import 'package:get/get.dart';
 import 'package:intl/intl.dart';
+
+import '../feature/data_add/presentation/view/data_add_screen.dart';
 
 class NewsDetailScreen extends StatelessWidget {
   final News news;

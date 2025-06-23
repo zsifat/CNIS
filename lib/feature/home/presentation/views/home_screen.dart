@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/bloc/profile_info_cubit/profile_info_cubit.dart';
 import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/viewmodels/selected_upazila_provider.dart';
 import 'package:chapainawabganjcity/views/shopping_details.dart';
@@ -7,17 +8,18 @@ import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:chapainawabganjcity/views/widgets/app_drawer.dart';
 import 'package:chapainawabganjcity/views/widgets/new_app_drawer.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:chapainawabganjcity/models/category.dart';
+import 'package:chapainawabganjcity/feature/home/data/model/category.dart';
 import 'package:chapainawabganjcity/viewmodels/category_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
 import 'package:marquee/marquee.dart';
-import '../viewmodels/about_viewmodel.dart';
-import '../viewmodels/sub_category_viewmodel.dart';
-import 'DataScreen.dart';
+import '../../../../viewmodels/about_viewmodel.dart';
+import '../../../../viewmodels/sub_category_viewmodel.dart';
+import '../../../../views/DataScreen.dart';
 
 class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
@@ -35,6 +37,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
     await ref.read(sliderViewModelProvider.notifier).fetchSliders();
     await ref.read(aboutViewModelProvider.notifier).fetchAboutData();
     await ref.read(subCategoryProvider.notifier).fetchSubCategories();
+    Future.microtask(() => context.read<ProfileCubit>().loadUserProfile(),);
   }
 
   @override
@@ -236,43 +239,22 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
 
           child: InkWell(
             onTap: () async {
-
-              //doctor
-              if (category.id == 2) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 2,
-                                )
-                                .toList())));
-
-              }
               //blood
-              else if (category.id == 4) {
+              if (category.id == 4) {
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => ShoppingDetailsScreen(
-                              id: category.id,
-                              title: category.title,
-                              subcategories: subCategories
-                                  .where(
-                                    (element) => int.tryParse(element.categoryId ?? '0') == 4,
-                                  )
-                                  .toList(),
-                            )));
+                          id: category.id,
+                          title: category.title,
+                          subcategories: subCategories
+                              .where(
+                                (element) => int.tryParse(element.categoryId ?? '0') == 4,
+                          )
+                              .toList(),
+                        )));
 
-              }
-              //kenakata
-              else if (category.id == 134) {
-                // Navigator.push(
-                //     context,
-                //     MaterialPageRoute(
-                //         builder: (context) => ShoppingDetailsScreen(id: category.id, title: category.title,subcategories: subCategories.where((element) => int.tryParse(element.categoryId ?? '0') == 134,).toList(),)));
+              }else if(category.hasSubcategory){
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -280,71 +262,10 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                             categoryName: category.title,
                             subcategories: subCategories
                                 .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 134,
-                                )
-                                .toList())));
-                //house rent
-              }
-              else if (category.id == 9) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 9,
+                                  (element) => int.tryParse(element.categoryId ?? '0') == category.id,
                             )
                                 .toList())));
-
-                //car rent
-              } else if (category.id == 10) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 10,
-                            )
-                                .toList())));
-
-                //worker
-              } else if (category.id == 16) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 16,
-                            )
-                                .toList())));
-              } else if (category.id == 17) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 17,
-                            )
-                                .toList())));
-              } else if (category.id == 149) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => SubcategoryPage(
-                            categoryName: category.title,
-                            subcategories: subCategories
-                                .where(
-                                  (element) => int.tryParse(element.categoryId ?? '0') == 149,
-                            )
-                                .toList())));
-              } else {
+              }else {
                 Navigator.push(
                     context,
                     MaterialPageRoute(

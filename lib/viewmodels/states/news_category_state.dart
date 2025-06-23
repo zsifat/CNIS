@@ -1,6 +1,6 @@
 import 'package:chapainawabganjcity/models/news_category.dart';
 
-import '../../models/category.dart';
+import '../../feature/home/data/model/category.dart';
 
 class NewsCategoryState {
   final List<NewsCategory> newsCategories;

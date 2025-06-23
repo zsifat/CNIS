@@ -1,6 +1,6 @@
-import 'package:chapainawabganjcity/views/about_screen.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/views/about_screen.dart';
 import 'package:chapainawabganjcity/views/advertisement_screen.dart';
-import 'package:chapainawabganjcity/views/home_screen.dart';
+import 'package:chapainawabganjcity/feature/home/presentation/views/home_screen.dart';
 import 'package:chapainawabganjcity/views/main_screen.dart';
 import 'package:chapainawabganjcity/views/notice_screen.dart';
 import 'package:flutter/material.dart';

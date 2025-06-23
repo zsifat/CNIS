@@ -8,14 +8,14 @@ import 'api_constants.dart';
 
 class ApiClient {
   static final ApiClient instance = ApiClient._internal();
-  late Dio _dio;
+  late Dio dio;
 
   factory ApiClient() {
     return instance;
   }
 
   ApiClient._internal() {
-    _dio = Dio(
+    dio = Dio(
       BaseOptions(
         baseUrl: ApiConstants.baseUrl,
         connectTimeout: const Duration(seconds: 10),
@@ -29,7 +29,7 @@ class ApiClient {
       ),
     );
 
-    _dio.interceptors.add(
+    dio.interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
           final prefs = await SharedPreferences.getInstance();
@@ -42,7 +42,7 @@ class ApiClient {
       ),
     );
     // Add Pretty Dio Logger
-    _dio.interceptors.add(PrettyDioLogger(
+    dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
       requestBody: true,
       responseBody: true,
@@ -55,7 +55,7 @@ class ApiClient {
 
   Future<Response> get(String endpoint, {Map<String, dynamic>? queryParameters}) async {
     try {
-      return await _dio.get(endpoint, queryParameters: queryParameters);
+      return await dio.get(endpoint, queryParameters: queryParameters);
     } on DioException catch (e) {
       throw Exception(e);
     }
@@ -64,7 +64,7 @@ class ApiClient {
   Future<Response> post(String endpoint,
       {Map<String, dynamic>? queryParameters, Object? data}) async {
     try {
-      return await _dio.post(endpoint, queryParameters: queryParameters, data: data);
+      return await dio.post(endpoint, queryParameters: queryParameters, data: data);
     } on DioException catch (e) {
       throw Exception(e);
     }

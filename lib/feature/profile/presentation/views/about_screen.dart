@@ -1,4 +1,8 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:chapainawabganjcity/feature/login/presentation/presentation/view/login_screen.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/bloc/profile_info_cubit/profile_info_cubit.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/bloc/profile_info_cubit/profile_info_state.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/views/profile__update_screen.dart';
 import 'package:chapainawabganjcity/viewmodels/about_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/states/aboutState.dart';
 import 'package:chapainawabganjcity/views/advertisement_screen.dart';
@@ -8,6 +12,7 @@ import 'package:chapainawabganjcity/views/package_screen.dart';
 import 'package:chapainawabganjcity/views/widgets/app_bar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
@@ -30,39 +35,7 @@ class AboutScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            // Container(
-            //   padding: const EdgeInsets.all(8),
-            //   decoration: BoxDecoration(
-            //       borderRadius: BorderRadius.circular(16), color: const Color(0xFFE9FAF8)),
-            //   child: Row(
-            //     children: [
-            //       CircleAvatar(
-            //         backgroundImage: AssetImage('assets/images/pp.png'),
-            //         radius: 32,
-            //       ),
-            //       const SizedBox(
-            //         width: 8,
-            //       ),
-            //       Expanded(
-            //           child: Column(
-            //         crossAxisAlignment: CrossAxisAlignment.start,
-            //         children: [
-            //           Text(
-            //             'মোঃ তৌফিকুল ইসলাম',
-            //             textAlign: TextAlign.left,
-            //             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-            //           ),
-            //           Text(
-            //             'Businessman',
-            //             textAlign: TextAlign.left,
-            //             style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-            //           ),
-            //         ],
-            //       ))
-            //     ],
-            //   ),
-            // ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             Row(
@@ -74,12 +47,69 @@ class AboutScreen extends ConsumerWidget {
               ],
             ),
             const SizedBox(
-              height: 20,
+              height: 10,
             ),
-            buildItems(
-              'প্রোফাইল আপডেট করুন',
-              Icons.edit,
-              () {
+            BlocBuilder<ProfileCubit, ProfileState>(
+              builder: (context, state) {
+                if (state is ProfileLoadSuccess) {
+                  return Column(
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(8),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(16), color: Colors.transparent),
+                        child: Column(
+                          children: [
+                            CircleAvatar(
+                              radius: 40,
+                              backgroundColor: Colors.grey[200],
+                              child: ClipOval(
+                                child: CachedNetworkImage(
+                                  imageUrl: state.profile.data.thumb,
+                                  width: 80,
+                                  height: 80,
+                                  fit: BoxFit.cover,
+                                  errorWidget: (context, url, error) => const Icon(
+                                    Icons.person,
+                                    size: 32,
+                                    color: Colors.black,
+                                  ),
+                                  placeholder: (context, url) => const CircularProgressIndicator(
+                                    color: Colors.green,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            const SizedBox(
+                              height: 6,
+                            ),
+                            Text(
+                              state.profile.data.name,
+                              textAlign: TextAlign.left,
+                              style: const TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
+                            )
+                          ],
+                        ),
+                      ),
+                      const SizedBox(
+                        height: 10,
+                      ),
+                      buildItems(
+                        'প্রোফাইল আপডেট করুন',
+                        Icons.edit,
+                        () {
+                          Get.to(
+                              ProfileUpdateScreen(
+                              initialUsername: state.profile.data.name,
+                          imageUrl: state.profile.data.thumb,
+                          ));
+                        },
+                      ),
+                    ],
+                  );
+                } else {
+                  return const SizedBox.shrink();
+                }
               },
             ),
             const SizedBox(
@@ -117,7 +147,7 @@ class AboutScreen extends ConsumerWidget {
               'পেমেন্ট হিস্টোরি',
               Icons.credit_card_rounded,
               () {
-               showCustomGreenSnackBar(context);
+                showCustomGreenSnackBar(context);
               },
             ),
             const SizedBox(
@@ -204,14 +234,13 @@ class AboutScreen extends ConsumerWidget {
             buildItems(
               'লগ আউট করুন',
               FontAwesomeIcons.arrowRightFromBracket,
-              () async{
+              () async {
                 final prefs = await SharedPreferences.getInstance();
                 prefs.clear();
                 Get.offAll(const LoginScreen());
               },
             ),
             const SizedBox(height: 10),
-
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
@@ -221,18 +250,26 @@ class AboutScreen extends ConsumerWidget {
               child: const Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Disclaimer',style: TextStyle(fontSize: 14,fontWeight: FontWeight.w600,color: Colors.black87),),
-                  SizedBox(height: 6,),
+                  Text(
+                    'Disclaimer',
+                    style:
+                        TextStyle(fontSize: 14, fontWeight: FontWeight.w600, color: Colors.black87),
+                  ),
+                  SizedBox(
+                    height: 6,
+                  ),
                   Text(
                     'এই অ্যাপটি কোনো সরকারি সংস্থার সাথে সম্পর্কিত বা অনুমোদিত নয়। '
-                        'সব তথ্য পাবলিক উৎস থেকে সংগৃহীত এবং শুধুমাত্র ব্যবহারকারীদের সুবিধার্থে প্রদান করা হয়েছে।',
+                    'সব তথ্য পাবলিক উৎস থেকে সংগৃহীত এবং শুধুমাত্র ব্যবহারকারীদের সুবিধার্থে প্রদান করা হয়েছে।',
                     style: TextStyle(
                       fontSize: 14,
                       color: Colors.black87,
                     ),
                     textAlign: TextAlign.justify,
                   ),
-                  SizedBox(height: 6,),
+                  SizedBox(
+                    height: 6,
+                  ),
                   Text(
                     'This app does not collect, store, or share any personal user data.',
                     style: TextStyle(fontSize: 14, color: Colors.black87),
@@ -302,7 +339,8 @@ class AboutScreen extends ConsumerWidget {
     );
   }
 }
-void showCustomGreenSnackBar(BuildContext context, {String title ='Will be available soon!'}) {
+
+void showCustomGreenSnackBar(BuildContext context, {String title = 'Will be available soon!'}) {
   final snackBar = SnackBar(
     content: Text(
       title,

@@ -3,12 +3,14 @@ class Category {
   final String title;
   final String? parentCategory;
   final String thumb;
+  final bool hasSubcategory;
 
   Category({
     required this.id,
     required this.title,
     this.parentCategory,
     required this.thumb,
+    required this.hasSubcategory
   });
 
   // Factory constructor to create a Category from a JSON object
@@ -18,6 +20,7 @@ class Category {
       title: json['title'],
       parentCategory: json['parent_category'],
       thumb: 'https://cnis.smartbizz.xyz/storage/app/${json['thumb']}',
+      hasSubcategory: json['has_subcategory']
     );
   }
 

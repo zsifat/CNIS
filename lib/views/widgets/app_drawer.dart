@@ -5,7 +5,7 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../../viewmodels/about_viewmodel.dart';
-import '../about_screen.dart';
+import '../../feature/profile/presentation/views/about_screen.dart';
 import '../advertisement_screen.dart';
 import '../main_screen.dart';
 import '../notice_screen.dart';

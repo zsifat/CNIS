@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:chapainawabganjcity/models/about.dart';
-import 'package:chapainawabganjcity/models/category.dart';
+import 'package:chapainawabganjcity/feature/home/data/model/category.dart';
 import 'package:chapainawabganjcity/models/data.dart';
 import 'package:chapainawabganjcity/models/news.dart';
 import 'package:chapainawabganjcity/models/news_category.dart';

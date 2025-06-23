@@ -5,10 +5,13 @@ import 'package:chapainawabganjcity/viewmodels/slider_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/sub_category_viewmodel.dart';
 import 'package:chapainawabganjcity/views/main_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'dart:async';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../feature/profile/presentation/bloc/profile_info_cubit/profile_info_cubit.dart';
 
 class SplashScreen extends ConsumerStatefulWidget {
   const SplashScreen({super.key});
@@ -38,6 +41,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
       final prefs = await SharedPreferences.getInstance();
       final isLogin = prefs.getBool('isLogin')??false;
       if(isLogin){
+        context.read<ProfileCubit>().loadUserProfile();
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const MainScreen()),

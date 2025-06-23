@@ -1,9 +1,9 @@
 
 import 'package:chapainawabganjcity/feature/login/presentation/presentation/view/login_screen.dart';
 import 'package:chapainawabganjcity/feature/signup/presentation/view/signup_screen.dart';
-import 'package:chapainawabganjcity/views/about_screen.dart';
+import 'package:chapainawabganjcity/feature/profile/presentation/views/about_screen.dart';
 import 'package:chapainawabganjcity/views/advertisement_screen.dart';
-import 'package:chapainawabganjcity/views/home_screen.dart';
+import 'package:chapainawabganjcity/feature/home/presentation/views/home_screen.dart';
 import 'package:chapainawabganjcity/views/notice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
