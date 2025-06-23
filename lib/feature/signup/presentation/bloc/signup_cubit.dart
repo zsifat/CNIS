@@ -16,20 +16,12 @@ class SignupCubit extends Cubit<SignupState>{
     try{
       final response =await _authRepository.signUP(userName: userName, email: email, password: password);
       final prefs = await SharedPreferences.getInstance();
-      prefs.setString(SharedPrefKeys.userName, userName);
-      emit(SignupSuccess());
-    }catch(e){
-      emit(SignupFailed());
-      throw Exception(e);
-    }
-  }
-
-  Future<void> login({required String email, required String password}) async{
-    emit(SignupLoading());
-    try{
-      final response =await _authRepository.login(email: email, password: password);
-      print(response.data);
-      emit(SignupSuccess());
+      if(response.data['message']=='User registered successfully.'){
+        prefs.setString(SharedPrefKeys.userName, userName);
+        emit(SignupSuccess());
+      }else{
+        emit(SignupFailed());
+      }
     }catch(e){
       emit(SignupFailed());
       throw Exception(e);

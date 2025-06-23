@@ -30,38 +30,38 @@ class AboutScreen extends ConsumerWidget {
         padding: const EdgeInsets.all(8.0),
         child: ListView(
           children: [
-            Container(
-              padding: const EdgeInsets.all(8),
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(16), color: const Color(0xFFE9FAF8)),
-              child: Row(
-                children: [
-                  CircleAvatar(
-                    backgroundImage: AssetImage('assets/images/pp.png'),
-                    radius: 32,
-                  ),
-                  const SizedBox(
-                    width: 8,
-                  ),
-                  Expanded(
-                      child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        'মোঃ তৌফিকুল ইসলাম',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
-                      ),
-                      Text(
-                        'Businessman',
-                        textAlign: TextAlign.left,
-                        style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
-                      ),
-                    ],
-                  ))
-                ],
-              ),
-            ),
+            // Container(
+            //   padding: const EdgeInsets.all(8),
+            //   decoration: BoxDecoration(
+            //       borderRadius: BorderRadius.circular(16), color: const Color(0xFFE9FAF8)),
+            //   child: Row(
+            //     children: [
+            //       CircleAvatar(
+            //         backgroundImage: AssetImage('assets/images/pp.png'),
+            //         radius: 32,
+            //       ),
+            //       const SizedBox(
+            //         width: 8,
+            //       ),
+            //       Expanded(
+            //           child: Column(
+            //         crossAxisAlignment: CrossAxisAlignment.start,
+            //         children: [
+            //           Text(
+            //             'মোঃ তৌফিকুল ইসলাম',
+            //             textAlign: TextAlign.left,
+            //             style: TextStyle(fontWeight: FontWeight.w700, fontSize: 16),
+            //           ),
+            //           Text(
+            //             'Businessman',
+            //             textAlign: TextAlign.left,
+            //             style: TextStyle(fontWeight: FontWeight.w400, fontSize: 14),
+            //           ),
+            //         ],
+            //       ))
+            //     ],
+            //   ),
+            // ),
             SizedBox(
               height: 10,
             ),
@@ -202,7 +202,7 @@ class AboutScreen extends ConsumerWidget {
               height: 10,
             ),
             buildItems(
-              'লগআউট করুন',
+              'লগ আউট করুন',
               FontAwesomeIcons.arrowRightFromBracket,
               () async{
                 final prefs = await SharedPreferences.getInstance();

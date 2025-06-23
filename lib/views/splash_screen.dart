@@ -61,7 +61,7 @@ class _SplashScreenState extends ConsumerState<SplashScreen> {
           children: [
             // Logo image
             Image.asset(
-              'assets/images/cnis_updated_logo.jpg', // Adjust the image path as necessary
+              'assets/images/cnislogo.png', // Adjust the image path as necessary
               width: 200, // Adjust the width as per your design
               height: 200, // Adjust the height as per your design
             ),

@@ -1,5 +1,9 @@
+import 'package:chapainawabganjcity/core/shared_prefs_service/shared_pref_keys.dart';
+import 'package:chapainawabganjcity/feature/login/presentation/presentation/view/login_screen.dart';
 import 'package:dio/dio.dart';
+import 'package:get/get.dart' as getx;
 import 'package:pretty_dio_logger/pretty_dio_logger.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'api_constants.dart';
 
 class ApiClient {
@@ -18,13 +22,25 @@ class ApiClient {
         receiveTimeout: const Duration(seconds: 10),
         responseType: ResponseType.json,
         followRedirects: true, // Enable following redirects
-        maxRedirects: 5,       // Maximum number of redirects to follow
+        maxRedirects: 5, // Maximum number of redirects to follow
         validateStatus: (status) {
           return status! < 500; // Accept all status codes below 500
         },
       ),
     );
 
+    _dio.interceptors.add(
+      InterceptorsWrapper(
+        onRequest: (options, handler) async {
+          final prefs = await SharedPreferences.getInstance();
+          final token = prefs.getString(SharedPrefKeys.authToken);
+          if (token != null && token.isNotEmpty) {
+            options.headers['Authorization'] = 'Bearer $token';
+          }
+          return handler.next(options);
+        },
+      ),
+    );
     // Add Pretty Dio Logger
     _dio.interceptors.add(PrettyDioLogger(
       requestHeader: true,
@@ -45,9 +61,10 @@ class ApiClient {
     }
   }
 
-  Future<Response> post(String endpoint, {Map<String, dynamic>? queryParameters, Map<String, dynamic>? data}) async {
+  Future<Response> post(String endpoint,
+      {Map<String, dynamic>? queryParameters, Object? data}) async {
     try {
-      return await _dio.post(endpoint, queryParameters: queryParameters,data: data);
+      return await _dio.post(endpoint, queryParameters: queryParameters, data: data);
     } on DioException catch (e) {
       throw Exception(e);
     }

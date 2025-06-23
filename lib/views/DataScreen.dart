@@ -1,3 +1,4 @@
+import 'package:chapainawabganjcity/feature/data_add/presentation/view/data_add_screen.dart';
 import 'package:chapainawabganjcity/models/data.dart';
 import 'package:chapainawabganjcity/models/subCategory.dart';
 import 'package:chapainawabganjcity/models/upazila.dart';
@@ -9,6 +10,7 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 
 import '../viewmodels/search_text_viewmodel.dart';
@@ -27,7 +29,6 @@ class DataScreen extends ConsumerStatefulWidget {
 
 class _DataScreenState extends ConsumerState<DataScreen> {
   bool isOffline = true;
-
 
   void _checkInternet() async {
     final connectivityResult = await Connectivity().checkConnectivity();
@@ -52,8 +53,6 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       () => ref.read(dataNotifierProvider.notifier).fetchData(widget.id),
     );
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -93,16 +92,17 @@ class _DataScreenState extends ConsumerState<DataScreen> {
       },
     ).toList();
 
-
     var mediaQuery = MediaQuery.of(context);
     double width = mediaQuery.size.width;
     double height = mediaQuery.size.height;
 
     String? marqueeText;
     if (widget.id == '13') {
-      marqueeText = "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত চাকরির তথ্য সংশ্লিষ্ট নিয়োগকারী প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। নিয়োগ প্রক্রিয়া ও দায়িত্ব সম্পূর্ণভাবে সংশ্লিষ্ট প্রতিষ্ঠানগুলোর। এ বিষয়ে কোনো লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
-    } else if (['1','2','10','15'].contains(widget.id)) {
-      marqueeText = "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত সকল তথ্য সংশ্লিষ্ট ব্যাক্তি বা প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। কোনো ধরনের লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
+      marqueeText =
+          "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত চাকরির তথ্য সংশ্লিষ্ট নিয়োগকারী প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। নিয়োগ প্রক্রিয়া ও দায়িত্ব সম্পূর্ণভাবে সংশ্লিষ্ট প্রতিষ্ঠানগুলোর। এ বিষয়ে কোনো লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
+    } else if (['1', '2', '10', '15'].contains(widget.id)) {
+      marqueeText =
+          "চাপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপে প্রকাশিত সকল তথ্য সংশ্লিষ্ট ব্যাক্তি বা প্রতিষ্ঠান কর্তৃক প্রদান করা হয়। কোনো ধরনের লেনদেন বা দায়িত্বের সাথে CNIS অ্যাপ সংশ্লিষ্ট নয়।";
     }
 
     return PopScope(
@@ -111,6 +111,17 @@ class _DataScreenState extends ConsumerState<DataScreen> {
         ref.read(searchTextProvider.notifier).clearSearchText();
       },
       child: Scaffold(
+        floatingActionButton: FloatingActionButton(
+          backgroundColor: Colors.green.shade800,
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+            size: 36,
+          ),
+          onPressed: () {
+            Get.to(InputFormScreen(catId: widget.id,subCatId: widget.subCategory?.id.toString(),));
+          },
+        ),
         appBar: buildAppBar(widget.title),
         body: isOffline
             ? buildNoInternet()
@@ -119,20 +130,23 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    if(marqueeText!=null)
+                    if (marqueeText != null)
                       SizedBox(
-                      height: 30,
-                      width: double.infinity,
-                      child: Marquee(
-                        text: marqueeText,
-                        style: TextStyle(fontWeight: FontWeight.bold,fontSize: 14,color: Colors.green.shade800),
-                        scrollAxis: Axis.horizontal,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        blankSpace: 20.0,
-                        velocity: 60.0,
-                        startPadding: 10.0,
+                        height: 30,
+                        width: double.infinity,
+                        child: Marquee(
+                          text: marqueeText,
+                          style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14,
+                              color: Colors.green.shade800),
+                          scrollAxis: Axis.horizontal,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          blankSpace: 20.0,
+                          velocity: 60.0,
+                          startPadding: 10.0,
+                        ),
                       ),
-                    ),
                     const SizedBox(height: 4),
                     SearchBar(
                       backgroundColor: WidgetStateProperty.all(Colors.white),
@@ -160,38 +174,9 @@ class _DataScreenState extends ConsumerState<DataScreen> {
                     const SizedBox(
                       height: 8,
                     ),
-                    // Text(
-                    //   'ফিল্টার করুন (${Upazila.values[selectedUpazilaFilterIndex].name} উপজেলা)',
-                    //   style: TextStyle(
-                    //     fontSize: width * 0.05, // Responsive font size
-                    //     fontWeight: FontWeight.bold,
-                    //     color: Colors.black,
-                    //   ),
-                    // ),
-                    // Container(
-                    //   height: 60,
-                    //   padding: const EdgeInsets.symmetric(vertical: 6.0),
-                    //   child: DropdownMenu(
-                    //     width: width,
-                    //       menuStyle: MenuStyle(backgroundColor: WidgetStateProperty.all(Colors.white)),
-                    //       initialSelection: selectedSubcategory,
-                    //       hintText: 'সকল ধরন',
-                    //       onSelected: (value) {
-                    //         if (value != null) {
-                    //           setState(() {
-                    //             selectedSubcategory = value;
-                    //           });
-                    //         }
-                    //       },
-                    //       dropdownMenuEntries: [
-                    //         ...subCategories.map(
-                    //           (e) => DropdownMenuEntry(value: e, label: e),
-                    //         )
-                    //       ]),
-                    // ),
-                    // const SizedBox(height: 10),
                     dataState.isLoading
-                        ? const Expanded(child: Center(child: CircularProgressIndicator(color: Colors.green)))
+                        ? const Expanded(
+                            child: Center(child: CircularProgressIndicator(color: Colors.green)))
                         : searchFilteredDataList.isEmpty
                             ? Expanded(
                                 child: Column(

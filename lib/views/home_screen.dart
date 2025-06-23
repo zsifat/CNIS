@@ -250,8 +250,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                 )
                                 .toList())));
 
-                //blood
               }
+              //blood
               else if (category.id == 4) {
                 Navigator.push(
                     context,
@@ -266,8 +266,8 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                                   .toList(),
                             )));
 
-                //kenakata
               }
+              //kenakata
               else if (category.id == 134) {
                 // Navigator.push(
                 //     context,

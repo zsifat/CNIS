@@ -36,7 +36,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ClipRRect(
                   borderRadius: BorderRadius.circular(70),
                   child: Image.asset(
-                    'assets/images/cnis_updated_logo.jpg',
+                    'assets/images/cnislogo.png',
                     height: 140,
                   ),
                 ),
@@ -136,7 +136,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 BlocConsumer<LoginCubit, LoginState>(
                   listener: (context, state) {
                     if (state is LoginSuccess) {
-                      Get.to(const MainScreen());
+                      Get.offAll(const MainScreen());
                     }else if(state is LoginFailed){
                       Get.snackbar(
                         'Login Failed',

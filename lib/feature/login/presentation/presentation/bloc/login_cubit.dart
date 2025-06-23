@@ -13,9 +13,10 @@ class LoginCubit extends Cubit<LoginState>{
     emit(LoginLoading());
     try{
       final response =await _authRepository.login(email: email, password: password);
-      print(response.data);
       final prefs = await SharedPreferences.getInstance();
       prefs.setBool(SharedPrefKeys.isLogin, true);
+      prefs.setString(SharedPrefKeys.authToken, response.data['token']);
+      prefs.setString(SharedPrefKeys.userId, response.data['user']['userId'].toString());
       emit(LoginSuccess());
     }catch(e){
       emit(LoginFailed());

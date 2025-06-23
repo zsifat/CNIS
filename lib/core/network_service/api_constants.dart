@@ -3,4 +3,5 @@ class ApiConstants {
   static const String baseUrl = 'https://cnis.smartbizz.xyz';
   static const String loginUrl= '$baseUrl/api/login';
   static const String signUpUrl= '$baseUrl/api/register';
+  static const String dataPost= '$baseUrl/api/activities';
 }
