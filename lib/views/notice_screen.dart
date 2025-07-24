@@ -57,17 +57,17 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
 
     return Scaffold(
       appBar: buildAppBar("নোটিফিকেশন"),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.green.shade800,
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 36,
-        ),
-        onPressed: () {
-          Get.to(const InputFormScreen(catId: '0'));
-        },
-      ),
+      // floatingActionButton: FloatingActionButton(
+      //   backgroundColor: Colors.green.shade800,
+      //   child: const Icon(
+      //     Icons.add,
+      //     color: Colors.white,
+      //     size: 36,
+      //   ),
+      //   onPressed: () {
+      //     Get.to(const InputFormScreen(catId: '0'));
+      //   },
+      // ),
       body: isOffline
           ? buildNoInternet()
           : RefreshIndicator(

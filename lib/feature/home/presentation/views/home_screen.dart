@@ -68,7 +68,7 @@ class _HomeScreenState extends ConsumerState<HomeScreen> {
                   height: 30,
                   width: double.infinity,
                   child: Marquee(
-                    text: "চাঁপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস (CNIS) অ্যাপসটি খুব শিঘ্রই শুভ উদ্বোধনী অনুষ্ঠানের আয়োজন হতে যাচ্ছে। তাই দ্রুত তথ্যটি শেয়ার করুন। প্লে স্টোর অ্যাপসের সার্চ বাটনে CNIS লিখে সার্চ করুন, আর ইনস্টল করুন তথ্য সেবা অ্যাপসটি। আজই আপনার বিজ্ঞাপন দিয়ে আমাদের সহযোগিতা করুন,আপনাদের সহযোগিতা আমাদের কাম্য।",
+                    text: "প্রিয় চাঁপাইনবাবগঞ্জবাসী আসসালামু আলাইকুম চাঁপাইনবাবগঞ্জ জেলার সকল তথ্য সুবিধা পেতে ব্যবহার করুন (CNIS) চাঁপাইনবাবগঞ্জ ইনফরমেশন সার্ভিস মোবাইল অ্যাপসটি। চাঁপাইনবাবগঞ্জ জেলার তথ্য বা আপনার ব্যবসায়িক তথ্য সংযুক্ত করতে আজই যোগাযোগ করুন ০১৩০৬০৯০০৮০",
                     style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16,color: Colors.green.shade800),
                     scrollAxis: Axis.horizontal,
                     crossAxisAlignment: CrossAxisAlignment.start,

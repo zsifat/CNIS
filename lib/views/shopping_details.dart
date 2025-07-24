@@ -5,8 +5,10 @@ import 'package:chapainawabganjcity/views/widgets/data_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 import 'package:marquee/marquee.dart';
 
+import '../feature/data_add/presentation/view/data_add_screen.dart';
 import '../models/subCategory.dart';
 import '../viewmodels/data_viewmodel.dart';
 import '../viewmodels/search_text_viewmodel.dart';
@@ -80,6 +82,17 @@ class _ShoppingDetailsScreenState extends ConsumerState<ShoppingDetailsScreen> {
 
     return Scaffold(
       appBar: buildAppBar(widget.title),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade800,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 36,
+        ),
+        onPressed: () {
+          Get.to(InputFormScreen(catId: widget.id.toString(),subCatId: _selectedIndex.toString(),));
+        },
+      ),
       body: Column(
         children: [
           Row(
