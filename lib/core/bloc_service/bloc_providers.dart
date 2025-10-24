@@ -1,4 +1,5 @@
 import 'package:chapainawabganjcity/feature/data_add/presentation/cubit/activity_form_cubit.dart';
+import 'package:chapainawabganjcity/feature/data_add/presentation/cubit/submit_news_cubit.dart';
 import 'package:chapainawabganjcity/feature/login/presentation/presentation/bloc/login_cubit.dart';
 import 'package:chapainawabganjcity/feature/profile/presentation/bloc/profile_info_cubit/profile_info_cubit.dart';
 import 'package:chapainawabganjcity/feature/signup/presentation/bloc/signup_cubit.dart';
@@ -14,7 +15,7 @@ class BlocProviders {
       BlocProvider<ActivityFormCubit>(create: (context) => ActivityFormCubit(),),
       BlocProvider<ProfileUpdateCubit>(create: (context) => ProfileUpdateCubit(),),
       BlocProvider<ProfileCubit>(create: (context) => ProfileCubit(),),
-
+      BlocProvider<SubmitNewsCubit>(create: (context) => SubmitNewsCubit(),),
     ];
   }
 }

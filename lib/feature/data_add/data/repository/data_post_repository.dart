@@ -59,4 +59,37 @@ class DataPostRepository {
       throw Exception(e.toString());
     }
   }
+
+  Future<Response> postNews({
+    required String title,
+    required String description,
+    required int catId,
+    File? image,
+  }) async {
+    try {
+      final formData = FormData.fromMap({
+        'title': title,
+        'description': description,
+        'cat_id': catId.toString(),
+        if (image != null)
+          'image': await MultipartFile.fromFile(
+            image.path,
+            filename: image.path.split('/').last,
+          ),
+      });
+
+      final response = await ApiClient.instance.post(
+        ApiConstants.newsPost,
+        data: formData,
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return response;
+      } else {
+        throw Exception('News post failed');
+      }
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 }

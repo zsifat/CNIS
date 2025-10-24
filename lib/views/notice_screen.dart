@@ -1,3 +1,4 @@
+import 'package:chapainawabganjcity/models/news_category.dart';
 import 'package:chapainawabganjcity/viewmodels/news_viewmodel.dart';
 import 'package:chapainawabganjcity/viewmodels/news_category_viewmodel.dart';
 import 'package:chapainawabganjcity/views/notice_details.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../feature/data_add/presentation/view/data_add_screen.dart';
+import '../feature/data_add/presentation/view/news_add_screen.dart';
 
 class NoticeScreen extends ConsumerStatefulWidget {
   const NoticeScreen({super.key});
@@ -52,22 +54,25 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
   @override
   Widget build(BuildContext context) {
     final newsCategoryState = ref.watch(newsCategoryProvider);
-    final categories = newsCategoryState.newsCategories;
+    final categories = newsCategoryState.newsCategories.where((element) => element.id != 0).toList();
     final allNews = ref.watch(newsProvider);
 
     return Scaffold(
       appBar: buildAppBar("নোটিফিকেশন"),
-      // floatingActionButton: FloatingActionButton(
-      //   backgroundColor: Colors.green.shade800,
-      //   child: const Icon(
-      //     Icons.add,
-      //     color: Colors.white,
-      //     size: 36,
-      //   ),
-      //   onPressed: () {
-      //     Get.to(const InputFormScreen(catId: '0'));
-      //   },
-      // ),
+      floatingActionButton: FloatingActionButton(
+        backgroundColor: Colors.green.shade800,
+        child: const Icon(
+          Icons.add,
+          color: Colors.white,
+          size: 36,
+        ),
+        onPressed: () {
+          Get.to(NewsAddScreen(
+            newsCategory: selectedCategoryIndex == 0 ? NewsCategory(id: 0,
+                title: 'নিউজ') : categories[selectedCategoryIndex-1],
+          ));
+        },
+      ),
       body: isOffline
           ? buildNoInternet()
           : RefreshIndicator(
@@ -128,7 +133,7 @@ class _NoticeScreenState extends ConsumerState<NoticeScreen> {
                                 ),
                                 child: Center(
                                   child: Text(
-                                    index == 0 ? 'All' : categories[index - 1].title,
+                                    (index == 0) ? 'All' : categories[index - 1].title,
                                     style: TextStyle(
                                       color: selectedCategoryIndex == index
                                           ? Colors.white

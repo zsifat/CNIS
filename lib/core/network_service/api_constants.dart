@@ -6,4 +6,5 @@ class ApiConstants {
   static const String dataPost= '$baseUrl/activities';
   static const String updateProfile = '$baseUrl/update-profile';
   static const String profileInfo = '$baseUrl/user/profile';
+  static const String newsPost = '$baseUrl/storenews';
 }
