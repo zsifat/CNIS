@@ -18,7 +18,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   bool _obscurePassword = true;
 
-  String _email = '';
+  String _phoneNo = '';
   String _password = '';
 
   @override
@@ -56,7 +56,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   decoration: InputDecoration(
                     filled: false,
                     prefixIcon: Icon(Icons.email, color: Colors.green.shade800),
-                    hintText: 'আপনার ইমেইল',
+                    hintText: 'ফোন নম্বর দিন',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                       borderSide: BorderSide(color: Colors.grey.shade200)
@@ -76,15 +76,15 @@ class _LoginScreenState extends State<LoginScreen> {
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'সঠিক ইমেইল দিন';
+                      return 'সঠিক ফোন নম্বর দিন';
                     }
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                    if (!emailRegex.hasMatch(value)) {
-                      return 'সঠিক ইমেইল লিখুন';
+                    final phoneRegex = RegExp(r'^(?:\+?88)?01[3-9]\d{8}$');
+                    if (!phoneRegex.hasMatch(value)) {
+                      return 'সঠিক ফোন নম্বর লিখুন';
                     }
                     return null;
                   },
-                  onSaved: (value) => _email = value!,
+                  onSaved: (value) => _phoneNo = value!,
                 ),
                 const SizedBox(height: 15),
 
@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          context.read<LoginCubit>().login(email: _email, password: _password);
+                          context.read<LoginCubit>().login(email: _phoneNo, password: _password);
                         }
                       },
                       child: Container(

@@ -18,7 +18,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
   final _formKey = GlobalKey<FormState>();
 
   String _username = '';
-  String _email = '';
+  String _phoneNo = '';
   String _password = '';
   bool _obscurePassword = true;
 
@@ -122,19 +122,19 @@ class _SignUpScreenState extends State<SignUpScreen> {
                             color: Colors.green.shade800,
                             width: 1,
                           )),
-                      hintText: 'আপনার ইমেইল'),
+                      hintText: 'ফোন নম্বর দিন'),
                   keyboardType: TextInputType.emailAddress,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return 'সঠিক ইমেইল দিন';
+                      return 'সঠিক ফোন নম্বর দিন';
                     }
-                    final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
-                    if (!emailRegex.hasMatch(value)) {
-                      return 'Please enter a valid email';
+                    final phoneRegex = RegExp(r'^(?:\+?88)?01[3-9]\d{8}$');
+                    if (!phoneRegex.hasMatch(value)) {
+                      return 'সঠিক ফোন নম্বর লিখুন';
                     }
                     return null;
                   },
-                  onSaved: (value) => _email = value!,
+                  onSaved: (value) => _phoneNo = value!,
                 ),
                 const SizedBox(height: 15),
 
@@ -195,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 BlocConsumer<SignupCubit, SignupState>(
                   listener: (context, state) {
                     if (state is SignupSuccess) {
-                      context.read<LoginCubit>().login(email: _email, password: _password);
+                      context.read<LoginCubit>().login(email: _phoneNo, password: _password);
                     } else if (state is SignupFailed) {
                       Get.snackbar(
                         'Signup Failed',
@@ -215,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _formKey.currentState!.save();
                           context
                               .read<SignupCubit>()
-                              .signUP(userName: _username, email: _email, password: _password);
+                              .signUP(userName: _username, email: _phoneNo, password: _password);
                         }
                       },
                       child: Container(
