@@ -154,7 +154,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
-                          context.read<LoginCubit>().login(email: _phoneNo, password: _password);
+                          context.read<LoginCubit>().login(mobile: _phoneNo, password: _password);
                         }
                       },
                       child: Container(

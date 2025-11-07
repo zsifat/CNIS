@@ -9,10 +9,10 @@ class LoginCubit extends Cubit<LoginState>{
   LoginCubit():super(LoginInitial());
   final _authRepository = AuthRepository();
 
-  Future<void> login({required String email, required String password}) async{
+  Future<void> login({required String mobile, required String password}) async{
     emit(LoginLoading());
     try{
-      final response =await _authRepository.login(email: email, password: password);
+      final response =await _authRepository.login(mobile: mobile, password: password);
       final prefs = await SharedPreferences.getInstance();
       prefs.setBool(SharedPrefKeys.isLogin, true);
       prefs.setString(SharedPrefKeys.authToken, response.data['token']);

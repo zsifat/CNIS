@@ -6,9 +6,9 @@ import '../../presentation/bloc/signup_state.dart';
 
 class AuthRepository {
   Future<Response> signUP(
-      {required String userName, required String email, required String password}) async {
+      {required String userName, required String mobile, required String password}) async {
     try {
-      final data = {'username': userName, 'email': email, 'password': password};
+      final data = {'username': userName, 'mobile': mobile, 'password': password};
       final response = await ApiClient.instance.post(ApiConstants.signUpUrl, data: data);
       if (response.statusCode == 200) {
         return response;
@@ -20,9 +20,9 @@ class AuthRepository {
     }
   }
 
-  Future<Response> login({required String email, required String password}) async {
+  Future<Response> login({required String mobile, required String password}) async {
     try {
-      final data = {'email': email, 'password': password};
+      final data = {'mobile': mobile, 'password': password};
       final response = await ApiClient.instance.post(ApiConstants.loginUrl, data: data);
       if (response.statusCode == 200) {
         return response;

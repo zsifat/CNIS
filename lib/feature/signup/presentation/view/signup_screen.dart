@@ -195,7 +195,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 BlocConsumer<SignupCubit, SignupState>(
                   listener: (context, state) {
                     if (state is SignupSuccess) {
-                      context.read<LoginCubit>().login(email: _phoneNo, password: _password);
+                      context.read<LoginCubit>().login(mobile: _phoneNo, password: _password);
                     } else if (state is SignupFailed) {
                       Get.snackbar(
                         'Signup Failed',
@@ -215,7 +215,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           _formKey.currentState!.save();
                           context
                               .read<SignupCubit>()
-                              .signUP(userName: _username, email: _phoneNo, password: _password);
+                              .signUP(userName: _username, mobile: _phoneNo, password: _password);
                         }
                       },
                       child: Container(

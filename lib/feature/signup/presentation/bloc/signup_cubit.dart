@@ -11,10 +11,10 @@ class SignupCubit extends Cubit<SignupState>{
   SignupCubit():super(SignupInitial());
   final _authRepository = AuthRepository();
 
-  Future<void> signUP({required String userName, required String email, required String password}) async{
+  Future<void> signUP({required String userName, required String mobile, required String password}) async{
     emit(SignupLoading());
     try{
-      final response =await _authRepository.signUP(userName: userName, email: email, password: password);
+      final response =await _authRepository.signUP(userName: userName, mobile: mobile, password: password);
       final prefs = await SharedPreferences.getInstance();
       if(response.data['message']=='User registered successfully.'){
         prefs.setString(SharedPrefKeys.userName, userName);
