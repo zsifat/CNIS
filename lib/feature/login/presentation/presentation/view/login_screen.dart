@@ -55,7 +55,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 TextFormField(
                   decoration: InputDecoration(
                     filled: false,
-                    prefixIcon: Icon(Icons.email, color: Colors.green.shade800),
+                    prefixIcon: Icon(Icons.phone, color: Colors.green.shade800),
                     hintText: 'ফোন নম্বর দিন',
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),

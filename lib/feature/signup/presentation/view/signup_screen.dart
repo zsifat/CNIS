@@ -96,7 +96,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 // Email
                 TextFormField(
                   decoration: InputDecoration(
-                      prefixIcon: Icon(Icons.email, color: Colors.green.shade800),
+                      prefixIcon: Icon(Icons.phone, color: Colors.green.shade800),
                       filled: false,
                       border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(12),
